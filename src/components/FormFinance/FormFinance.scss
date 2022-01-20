@@ -13,13 +13,6 @@
     padding: 20px;
   }
 
-  &__caption {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
-  }
-
   &__topic {
     font-size: 25px;
     line-height: 29px;
@@ -40,19 +33,6 @@
     grid-auto-rows: 10px;
   }
 
-  &__item_1-3-cell {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-  &__item_3-5-cell {
-    grid-column-start: 3;
-    grid-column-end: 5;
-  }
-  &__item_1-5-cell {
-    grid-column-start: 1;
-    grid-column-end: 5;
-  }
-
   &__item_input-date,
   &__item_input-sum {
     width: 115px;
@@ -64,18 +44,5 @@
     background: rgba(0, 0, 0, 0.12);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     border: 0;
-  }
-
-  &__history {
-    display: grid;
-    grid-template-columns: 1fr 1fr 2fr 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
-    align-items: center;
-    margin: 10px 0;
-  }
-
-  &__item-history {
-    padding-left: 5px;
   }
 }

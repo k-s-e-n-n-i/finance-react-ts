@@ -30,13 +30,9 @@ class EntryHistory extends React.Component<Props> {
 
     return (
       <div className="entry-history">
-        <div className="entry-history__item-history">{date}</div>
-        <div className="entry-history__item-history">
-          <p>{sum}</p>
-        </div>
-        <div className="entry-history__item-history">
-          <p>{name}</p>
-        </div>
+        <p className="entry-history__item">{date}</p>
+        <p className="entry-history__item">{sum}</p>
+        <p className="entry-history__item">{name}</p>
         <Button text={'ред.'} border={true} />
       </div>
     );

@@ -40,10 +40,7 @@ class FormFinance extends React.Component<Props, StateFF> {
 
     return (
       <div className="form-finance">
-        <div className="form-finance__caption">
-          <h1 className="form-finance__topic">{caption}</h1>
-          <Button text={'Добавить'} border={false} />
-        </div>
+        <h1 className="form-finance__topic">{caption}</h1>
 
         <form className="form-finance__ff-send" name="formFinance">
           <div className="form-finance__item form-finance__item_input-date">
@@ -56,17 +53,13 @@ class FormFinance extends React.Component<Props, StateFF> {
             <InputText id={'ff_name'} name={'nameEntry'} placeholder={'наименование'} />
           </div>
           <div className="form-finance__item">
-            <ButtonSubmit text={'сохр.'} border={false} />
+            <ButtonSubmit text={'Добавить'} border={false} />
           </div>
         </form>
 
-        <div className="form-finance__item form-finance__item_1-5-cell">
-          <hr className="form-finance__hr-line "></hr>
-        </div>
+        <hr className="form-finance__hr-line "></hr>
 
-        <div className="form-finance__history-list">
-          <History historyList={this.state.historyList} />
-        </div>
+        <History historyList={this.state.historyList} />
       </div>
     );
   }

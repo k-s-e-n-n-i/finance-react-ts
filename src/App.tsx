@@ -18,8 +18,8 @@ class App extends Component<{}> {
       <Router basename={basename}>
         <Routes>
           <Route path="/" element={<Layout header={0} content={startPage} footer={0} />} />
-          <Route path="/landing-page.html" element={<Layout content={landingPage} />} />
-          <Route path="/finance.html" element={<Layout header={0} content={finance} footer={0} />} />
+          <Route path="/landing-page" element={<Layout content={landingPage} />} />
+          <Route path="/finance" element={<Layout header={0} content={finance} footer={0} />} />
         </Routes>
       </Router>
     );

@@ -1,5 +1,4 @@
 import React from 'react';
-import './History.scss';
 
 import EntryHistory from '../EntryHistory/EntryHistory';
 
@@ -27,7 +26,7 @@ class History extends React.Component<Props, StateFF> {
 
   render() {
     return (
-      <div className="form-finance__history-list">
+      <div className="history">
         {this.props.historyList.map((entry: Entry, index: number) => (
           <EntryHistory date={entry.date} sum={entry.sum} name={entry.name} key={`entry${index}`} />
         ))}

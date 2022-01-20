@@ -11,8 +11,8 @@ class StartPage extends React.Component {
         <div className="start-page">
           <h2>Pages Toxin:</h2>
           <div className="start-page__links">
-            <Link classBlock="start-page__link" text="landing page" url={`/landing-page.html`} />
-            <Link classBlock="start-page__link" text="finance" url={`/finance.html`} />
+            <Link classBlock="start-page__link" text="landing page" url={`/landing-page`} />
+            <Link classBlock="start-page__link" text="finance" url={`/finance`} />
           </div>
         </div>
       </div>
