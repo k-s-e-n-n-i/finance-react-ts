@@ -1,0 +1,20 @@
+.link {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  color: #bc9cff;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+
+  &_gray {
+    color: rgba(31, 32, 65, 0.5);
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
