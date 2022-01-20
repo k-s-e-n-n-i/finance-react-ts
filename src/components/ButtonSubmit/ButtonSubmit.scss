@@ -1,0 +1,121 @@
+.button-submit {
+  position: relative;
+  border-radius: 22px;
+  z-index: 1;
+  padding: 2px 0;
+  cursor: pointer;
+
+  &_hover,
+  &__border_hover {
+    opacity: 0.5;
+  }
+
+  &_gradient {
+    background: linear-gradient(180deg, #535fef 0%, #b4baff 50%, #535fef 100%);
+
+    &.button-submit_narrow {
+      padding: 5px 14px;
+    }
+
+    &.button-submit_wide {
+      padding: 13px;
+    }
+
+    &:hover,
+    &:focus {
+      opacity: 0.5;
+    }
+  }
+
+  &_border {
+    &.button-submit_narrow {
+      min-width: 87px;
+
+      > .button-submit__block_border {
+        padding: 7px 10px;
+      }
+    }
+
+    &.button-submit_wide {
+      min-width: 99px;
+
+      > .button-submit__block_border {
+        padding: 12px 15px;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      > .button-submit__border {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &__block {
+    border-radius: 22px;
+    background: linear-gradient(180deg, #9399e4 0%, #b4baff 50%, #9399e4 100%);
+    width: 100%;
+    z-index: 1;
+    border: 0;
+    cursor: pointer;
+
+    color: #ffffff;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    user-select: none;
+    line-height: 16px;
+  }
+
+  &__block_gradient {
+    color: #ffffff;
+  }
+
+  &__block_gradient_arrow {
+    .button-submit__link {
+      padding-right: 5px;
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    bottom: 12px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-image: url('./img/arrow.svg');
+  }
+
+  &__arrow_white {
+    background-image: url('./img/arrow-white.svg');
+  }
+
+  &__block_border {
+    background: #fff;
+    width: calc(100% - 4px);
+    border-radius: 22px;
+    margin: 0 2px;
+
+    .button-submit__link {
+      color: #535fef;
+    }
+  }
+
+  &__border {
+    border-radius: 22px;
+    background: linear-gradient(180deg, #b4baff 0%, #535fef 50%, #b4baff 100%);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+}
