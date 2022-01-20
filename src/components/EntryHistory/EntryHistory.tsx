@@ -2,9 +2,6 @@ import React from 'react';
 import './EntryHistory.scss';
 
 import Button from '../button/button';
-import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
-import InputText from '../InputText/InputText';
-import { Requests } from '../../modules/FormFinance.Requests';
 
 type Props = {
   date: string;
