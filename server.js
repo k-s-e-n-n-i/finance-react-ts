@@ -13,9 +13,9 @@ webSocketServer.on('connection', function (ws) {
 
     const messageToString = JSON.parse(message);
 
-    checkGetDataFinance(messageToString);
-
     checkGuests(message, messageToString);
+    checkGetData(messageToString);
+    checkAddFinance(messageToString);
   });
 
   ws.on('close', function () {
@@ -36,13 +36,39 @@ function checkGuests(message, messageToString) {
   }
 }
 
-function checkGetDataFinance(messageToString) {
+function checkGetData(messageToString) {
   if (messageToString.getData !== undefined) {
     const getDataFile = getDataFromFile();
 
     if (getDataFile.finance !== undefined) {
-      for (const key1 in clients) {
-        clients[key1].send(JSON.stringify(getDataFile.finance));
+      for (const key in clients) {
+        const getJSON = JSON.stringify({ finance: getDataFile.finance });
+        clients[key].send(getJSON);
+      }
+    }
+  }
+}
+
+function checkAddFinance(messageToString) {
+  if (messageToString.finance !== undefined) {
+    writeData(messageToString);
+
+    const getDataFile = getDataFromFile();
+
+    if (getDataFile.finance !== undefined) {
+      for (const key in clients) {
+        const getJSON = JSON.stringify({
+          addFinance: `Данные зафиксированы`,
+          finance: getDataFile.finance,
+        });
+        clients[key].send(getJSON);
+      }
+    } else {
+      for (const key in clients) {
+        const getJSON = JSON.stringify({
+          addFinance: `Данные зафиксированы, но получение обновленных данных не удалось`,
+        });
+        clients[key].send(getJSON);
       }
     }
   }
