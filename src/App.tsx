@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { basename } from './modules/functions/functions';
+
+import Layout from './components/layout/layout';
+import StartPage from './pages/start-page/start-page';
+import LandingPage from './pages/landing-page/landing-page';
+import Finance from './pages/finance/finance';
+
+class App extends Component<{}> {
+  render() {
+    const startPage = <StartPage />;
+    const landingPage = <LandingPage />;
+    const finance = <Finance />;
+
+    return (
+      <Router basename={basename}>
+        <Routes>
+          <Route path="/" element={<Layout header={0} content={startPage} footer={0} />} />
+          <Route path="/landing-page.html" element={<Layout content={landingPage} />} />
+          <Route path="/finance.html" element={<Layout header={0} content={finance} footer={0} />} />
+        </Routes>
+      </Router>
+    );
+  }
 }
 
 export default App;
