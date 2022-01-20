@@ -1,0 +1,61 @@
+.dropdown-dates {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+
+  @media screen and (max-width: 380px) {
+    flex-wrap: wrap;
+  }
+
+  &__date-block {
+    position: relative;
+
+    @media screen and (max-width: 380px) {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__dropdown {
+    position: relative;
+    width: 150px;
+    padding: 9px 14px;
+    margin-top: 5px;
+    color: rgba(31, 32, 65, 0.75);
+    border-radius: 0.3vw;
+    border: 1px solid rgba(31, 32, 65, 0.25);
+    box-sizing: border-box;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    user-select: none;
+    cursor: pointer;
+
+    &:before {
+      content: '';
+      width: 15px;
+      height: 11px;
+      bottom: 12px;
+      right: 11px;
+      position: absolute;
+      cursor: pointer;
+      user-select: none;
+      background-image: url('./img/expand-more-dropdown-dates.svg');
+      background-repeat: no-repeat;
+    }
+
+    @media screen and (max-width: 380px) {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__calendar {
+    margin-top: 70px;
+    position: absolute;
+    left: 1px;
+    width: 100%;
+  }
+}
