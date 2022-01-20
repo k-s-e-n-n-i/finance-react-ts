@@ -1,0 +1,35 @@
+.form-search-room {
+  width: 380px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 0.3vw;
+  padding: 39px 29px 30px 29px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  z-index: 1;
+
+  @media screen and (max-width: 380px) {
+    width: 100%;
+    padding: 20px;
+  }
+
+  &__dropdown-dates {
+    margin: 22px 0 21px 0;
+    width: 100%;
+  }
+
+  &__topic {
+    font-size: 25px;
+    line-height: 29px;
+    font-weight: 700;
+    letter-spacing: -0.7px;
+  }
+
+  &__button {
+    width: 100%;
+    margin: 31px 0 0 0;
+  }
+}
