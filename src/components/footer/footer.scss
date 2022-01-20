@@ -1,0 +1,225 @@
+.footer {
+  &__block-menu {
+    border-top: 1px solid rgba(31, 32, 65, 0.1);
+    border-bottom: 1px solid rgba(31, 32, 65, 0.1);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    background: #fff;
+
+    @media screen and (max-width: 768px) {
+      border-bottom: 0;
+    }
+  }
+
+  &__content-container {
+    flex-grow: 1;
+    justify-content: space-between;
+    max-width: 80.5%;
+    min-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    display: flex;
+    padding: 89px 0;
+
+    @media screen and (max-width: 1430px) {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    @media screen and (max-width: 1170px) {
+      margin: 0 40px;
+      max-width: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      min-width: min-content;
+      justify-content: center;
+      padding: 110px 0 1px;
+    }
+
+    @media screen and (max-width: 320px) {
+      padding-top: 40px;
+    }
+  }
+
+  &__logo-block {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 255px;
+
+    @media screen and (max-width: 1000px) {
+      margin: 0;
+      max-width: none;
+      width: 100%;
+      flex-wrap: nowrap;
+      flex-direction: row;
+    }
+
+    @media screen and (max-width: 768px) {
+      min-width: min-content;
+      margin: 0;
+    }
+  }
+
+  &__logo-text {
+    margin: 14px 0;
+
+    @media screen and (max-width: 1000px) {
+      margin: auto 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__logo {
+    margin: 11px 0 3px;
+
+    @media screen and (max-width: 1280px) {
+      max-width: none;
+    }
+
+    @media screen and (max-width: 1000px) {
+      margin: auto 30px auto 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      margin: 10px auto 3px;
+    }
+  }
+
+  &__footer-menu {
+    margin: 0 0 0 45px;
+    display: flex;
+    padding: 0;
+    font-size: 14px;
+    color: rgba(31, 32, 65, 0.5);
+
+    @media screen and (max-width: 1000px) {
+      margin: 25px 0;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__menu-column {
+    display: block;
+    width: 200px;
+  }
+
+  &__menu-list {
+    padding: 0;
+  }
+
+  &__menu-li {
+    position: relative;
+    padding: 7px 0;
+    display: block;
+    user-select: none;
+  }
+
+  &__menu-a {
+    font-size: 14px;
+    line-height: 24px;
+    cursor: pointer;
+    display: block;
+    color: rgba(31, 32, 65, 0.5);
+    user-select: none;
+    text-decoration: none;
+    width: max-content;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__menu-topic-column {
+    display: block;
+    font-weight: 700;
+    color: #1f2041;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    padding: 10px 0 7px;
+  }
+
+  &__subscription {
+    width: 260px;
+    margin: 0;
+    padding: 0;
+
+    @media screen and (max-width: 1430px) {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__subscription-topic {
+    font-weight: 700;
+    color: #1f2041;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    cursor: inherit;
+    white-space: nowrap;
+    padding: 10px 0 7px;
+    margin: 0;
+    letter-spacing: 0.3px;
+  }
+
+  &__subscription-text {
+    margin: 6px 0 24px;
+  }
+
+  &__subscription-input {
+    width: 260px;
+  }
+
+  &__copyright-block {
+    background: #fff;
+    box-shadow: 0px 10px 20px rgba(31, 32, 65, 0.05);
+  }
+
+  &__copyright-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    min-width: 400px;
+    max-width: 80.7%;
+    margin: 0 auto;
+
+    @media screen and (max-width: 1280px) {
+      margin: 23px 20px;
+      max-width: 100%;
+    }
+
+    @media screen and (max-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      min-width: min-content;
+    }
+  }
+
+  &__copyright-text {
+    margin: 23px 0;
+
+    @media screen and (max-width: 768px) {
+      margin: 6px 0 20px;
+      text-align: center;
+    }
+  }
+}
