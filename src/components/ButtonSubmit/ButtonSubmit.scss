@@ -18,7 +18,7 @@
     }
 
     &.button-submit_wide {
-      padding: 13px;
+      padding: 10px;
     }
 
     &:hover,
@@ -98,14 +98,11 @@
   }
 
   &__block_border {
+    color: #535fef;
     background: #fff;
     width: calc(100% - 4px);
     border-radius: 22px;
     margin: 0 2px;
-
-    .button-submit__link {
-      color: #535fef;
-    }
   }
 
   &__border {
