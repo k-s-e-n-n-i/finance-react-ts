@@ -2,6 +2,8 @@ export interface Entry {
   date: string;
   sum: string;
   name?: string;
+  id: number;
+  state: string;
 }
 
 export interface HistoryList {

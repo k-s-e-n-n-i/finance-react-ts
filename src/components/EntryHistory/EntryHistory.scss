@@ -9,4 +9,9 @@
   &__item {
     padding-left: 5px;
   }
+
+  &__item_input-date,
+  &__item_input-sum {
+    width: 115px;
+  }
 }

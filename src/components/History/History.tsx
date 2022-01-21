@@ -12,6 +12,7 @@ class History extends React.Component<Props, StateFF> {
     date: 'дд.мм.гггг',
     sum: '0',
     name: '',
+    id: '0',
   };
 
   data: Props;
@@ -19,16 +20,22 @@ class History extends React.Component<Props, StateFF> {
   constructor(props: Props) {
     super(props);
     this.data = this.props;
-    this.state = this.props;
-
-    this.setState({ historyList: this.props.historyList });
   }
 
   render() {
+    console.log(`Новое historyList в History ${this.props.historyList[0]}`);
+
     return (
       <div className="history">
         {this.props.historyList.map((entry: Entry, index: number) => (
-          <EntryHistory date={entry.date} sum={entry.sum} name={entry.name} key={`entry${index}`} />
+          <EntryHistory
+            date={entry.date}
+            sum={entry.sum}
+            name={entry.name}
+            idItem={entry.id}
+            state={entry.state}
+            key={`${entry.id}${index}`}
+          />
         ))}
       </div>
     );
