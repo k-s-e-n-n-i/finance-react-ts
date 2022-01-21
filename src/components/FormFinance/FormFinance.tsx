@@ -68,8 +68,6 @@ class FormFinance extends React.Component<Props, StateFF> {
     const socket = new Requests();
     socket.getHistory(this);
   }
-
-  getHistory() {}
 }
 
 export default FormFinance;

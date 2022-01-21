@@ -1,6 +1,7 @@
 class Requests {
   formSearchRoom: HTMLFormElement | null = null;
   formFinance: HTMLFormElement | null = null;
+  arrNamesFormsEntry: string[] = [];
   constructor() {
     this.formSearchRoom = document.forms.namedItem('formSearchRoom');
     this.formFinance = document.forms.namedItem('formFinance');
@@ -8,6 +9,7 @@ class Requests {
 
   getHistory(hl: React.Component) {
     const { formFinance } = this;
+    let { arrNamesFormsEntry } = this;
 
     if (!window.WebSocket) {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
@@ -28,16 +30,24 @@ class Requests {
     };
 
     socket.onmessage = (event) => {
-      const incomingMessage = event.data;
-      console.log(`Приняты данные: ${incomingMessage}`);
+      const promise = new Promise((resolve, reject) => {
+        const incomingMessage = event.data;
+        console.log(`Приняты данные: ${incomingMessage}`);
 
-      const data = JSON.parse(incomingMessage);
+        const data = JSON.parse(incomingMessage);
 
-      if (data.finance !== undefined) {
-        hl.setState({
-          historyList: data.finance,
-        });
-      }
+        if (data.finance !== undefined) {
+          hl.setState({
+            historyList: data.finance,
+          });
+        }
+
+        resolve(true);
+      });
+
+      promise.then(() => {
+        this.checkFormsEntry(socket, arrNamesFormsEntry);
+      });
     };
 
     socket.onerror = (error: Event) => {
@@ -46,12 +56,13 @@ class Requests {
   }
 
   sendMessAddFinance(socket: WebSocket, form: HTMLFormElement) {
-    form.onsubmit = function () {
+    form.onsubmit = () => {
       const postJSON = {
         finance: {
           date: form.date.value,
           sum: form.sumEntry.value,
           name: form.nameEntry.value,
+          state: 'main',
         },
       };
       console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
@@ -67,6 +78,40 @@ class Requests {
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
     return false;
+  }
+
+  sendEditEntry(socket: WebSocket, form: HTMLFormElement) {
+    form.onsubmit = () => {
+      console.log('edit', form);
+      const postJSON = {
+        editEntry: {
+          id: form.getAttribute('id'),
+        },
+      };
+      console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+      socket.send(JSON.stringify(postJSON));
+      return false;
+    };
+  }
+
+  checkFormsEntry(socket: WebSocket, arrNamesFormsEntry: string[]) {
+    const mas = document.querySelectorAll('form.entry-history');
+    arrNamesFormsEntry = [];
+
+    mas.forEach((item) => {
+      const nameItem = item.getAttribute('name');
+      if (nameItem) {
+        arrNamesFormsEntry.push(nameItem);
+      }
+    });
+
+    arrNamesFormsEntry.forEach((item) => {
+      const form = document.forms.namedItem(item);
+
+      if (form) {
+        this.sendEditEntry(socket, form);
+      }
+    });
   }
 }
 
