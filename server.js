@@ -1,12 +1,11 @@
 const WebSocketServer = new require('ws');
 const fs = require('fs');
-const clients = {};
+const clients = new Set();
 
 const webSocketServer = new WebSocketServer.Server({ port: 9001 });
 webSocketServer.on('connection', function (ws) {
-  const id = Math.random();
-  clients[id] = ws;
-  console.log(`Новое соединение ${id}`);
+  clients.add(ws);
+  console.log(`Новое соединение ${clients}`);
 
   ws.on('message', function (message) {
     console.log(`Получено сообщение: ${message}`);
@@ -19,8 +18,8 @@ webSocketServer.on('connection', function (ws) {
   });
 
   ws.on('close', function () {
-    console.log('Соединение закрыто ' + id);
-    delete clients[id];
+    console.log(`Соединение закрыто ${clients}`);
+    clients.delete(ws);
   });
 });
 
@@ -30,8 +29,8 @@ function checkGuests(message, messageToString) {
   if (messageToString.guests !== undefined) {
     writeData(messageToString);
 
-    for (const key2 in clients) {
-      clients[key2].send(message);
+    for (const client of clients) {
+      client.send(message);
     }
   }
 }
@@ -41,9 +40,9 @@ function checkGetData(messageToString) {
     const getDataFile = getDataFromFile();
 
     if (getDataFile.finance !== undefined) {
-      for (const key in clients) {
+      for (const client of clients) {
         const getJSON = JSON.stringify({ finance: getDataFile.finance });
-        clients[key].send(getJSON);
+        client.send(getJSON);
       }
     }
   }
@@ -56,19 +55,19 @@ function checkAddFinance(messageToString) {
     const getDataFile = getDataFromFile();
 
     if (getDataFile.finance !== undefined) {
-      for (const key in clients) {
+      for (const client of clients) {
         const getJSON = JSON.stringify({
           addFinance: `Данные зафиксированы`,
           finance: getDataFile.finance,
         });
-        clients[key].send(getJSON);
+        client.send(getJSON);
       }
     } else {
-      for (const key in clients) {
+      for (const client of clients) {
         const getJSON = JSON.stringify({
           addFinance: `Данные зафиксированы, но получение обновленных данных не удалось`,
         });
-        clients[key].send(getJSON);
+        client.send(getJSON);
       }
     }
   }
