@@ -15,6 +15,7 @@ webSocketServer.on('connection', function (ws) {
     checkGuests(message, messageToString);
     checkGetData(messageToString);
     checkAddFinance(messageToString);
+    checkEditEntry(messageToString);
   });
 
   ws.on('close', function () {
@@ -73,6 +74,37 @@ function checkAddFinance(messageToString) {
   }
 }
 
+function checkEditEntry(messageToString) {
+  if (messageToString.editEntry !== undefined) {
+    const idEdit = parseInt(messageToString.editEntry.id);
+
+    let newJSON = {},
+      newFin = [];
+
+    const getDataFile = getDataFromFile();
+    getDataFile.finance.forEach((item) => {
+      if (item.id === idEdit) {
+        console.log(`Я нашел запись: ${item}`);
+
+        newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: 'edit' });
+      } else {
+        newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });
+      }
+    });
+
+    newJSON = Object.assign(getDataFile, { finance: newFin });
+
+    fs.writeFileSync('data.json', JSON.stringify(newJSON));
+    const json = getDataFromFile();
+    console.log(`\n Перезаписан data.json: изменено состояние id=${idEdit} на 'edit' \n`);
+
+    const sendJSON = JSON.stringify({ finance: json.finance });
+    for (const client of clients) {
+      client.send(sendJSON);
+    }
+  }
+}
+
 function writeData(postJSON) {
   let getJSON = getDataFromFile();
   let newJSON = getJSON;
@@ -83,13 +115,14 @@ function writeData(postJSON) {
     }
   }
 
-  for (let key in getJSON) {
+  Object.keys(getJSON).forEach((key, i) => {
     if (postJSON[key] != null) {
       newJSON[key] = [].concat(getJSON[key], postJSON[key]);
     }
-  }
+  });
 
   fs.writeFileSync('data.json', JSON.stringify(newJSON));
+  genID();
 
   const json = getDataFromFile();
   console.log('\n Перезаписан data.json:\n');
@@ -99,4 +132,43 @@ function writeData(postJSON) {
 function getDataFromFile() {
   const getData = JSON.parse(fs.readFileSync('data.json', 'utf8'));
   return getData;
+}
+
+function genID() {
+  const getDataFile = getDataFromFile();
+  const arrID = [];
+  let valID = 1;
+  let needID = 0;
+  let newFinance = [];
+
+  getDataFile.finance.forEach((item) => {
+    if (item.id === undefined) {
+      needID = 1;
+    } else {
+      arrID.push(item.id);
+    }
+  });
+
+  if (needID) {
+    let count = 0;
+    if (arrID.length !== 0) {
+      valID = Math.max.apply(null, arrID) + 1;
+    }
+
+    getDataFile.finance.forEach((item) => {
+      if (item.id === undefined) {
+        const newItem = Object.assign(item, { id: valID });
+        newFinance.push(newItem);
+        valID++;
+        count++;
+      }
+    });
+
+    newFinance = Object.assign({ finance: newFinance }, getDataFile);
+
+    fs.writeFileSync('data.json', JSON.stringify(newFinance));
+    console.log(`Было присвоено ${count} id`);
+  } else {
+    console.log(`Все записи имеют id`);
+  }
 }
