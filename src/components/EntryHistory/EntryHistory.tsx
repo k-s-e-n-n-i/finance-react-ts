@@ -34,37 +34,78 @@ class EntryHistory extends React.Component<Props, StateEnHi> {
   }
 
   render() {
-    return this.state.edit ? entryEdit(this.data) : entryMain(this.data);
+    let Comp;
+
+    if (this.state.edit) {
+      Comp = <EntryEdit data={this.props} />;
+    } else {
+      Comp = <EntryMain data={this.props} />;
+    }
+
+    return <div>{Comp}</div>;
   }
 
   componentDidMount() {}
 }
 
-const entryMain = (data: Props) => {
-  return (
-    <form className="entry-history" name={`entry${data.idItem}`} id={`${data.idItem}`}>
-      <p className="entry-history__item">{data.date}</p>
-      <p className="entry-history__item">{data.sum}</p>
-      <p className="entry-history__item">{data.name}</p>
-      <ButtonSubmit text={'ред.'} />
-    </form>
-  );
+type Props2 = {
+  data: Props;
 };
-const entryEdit = (data: Props) => {
-  return (
-    <form className="entry-history" name={`entry${data.idItem}`} id={`${data.idItem}`}>
-      <div className="entry-history__item-edit entry-history__item_input-date">
-        <InputText id={'ff_date'} name={'date'} inputText={data.date} />
-      </div>
-      <div className="entry-history__item-edit entry-history__item_input-sum">
-        <InputText id={'ff_sum'} name={'sumEntry'} inputText={data.sum} placeholder={'1000'} />
-      </div>
-      <div className="entry-history__item-edit">
-        <InputText id={'ff_name'} name={'nameEntry'} inputText={data.name} placeholder={'наименование'} />
-      </div>
-      <ButtonSubmit text={'сохр.'} border={false} />
-    </form>
-  );
-};
+
+class EntryMain extends React.Component<Props2> {
+  datas: Props2;
+
+  constructor(props: Props2) {
+    super(props);
+    this.datas = this.props;
+  }
+
+  render() {
+    const {
+      datas: { data },
+    } = this;
+    return (
+      <form className="entry-history" name={`entry${data.idItem}`} id={`${data.idItem}`}>
+        <p className="entry-history__item">{data.date}</p>
+        <p className="entry-history__item">{data.sum}</p>
+        <p className="entry-history__item">{data.name}</p>
+        <ButtonSubmit text={'ред.'} />
+      </form>
+    );
+  }
+
+  componentDidMount() {}
+}
+
+class EntryEdit extends React.Component<Props2> {
+  datas: Props2;
+
+  constructor(props: Props2) {
+    super(props);
+    this.datas = this.props;
+  }
+
+  render() {
+    const {
+      datas: { data },
+    } = this;
+    return (
+      <form className="entry-history" name={`entry${data.idItem}`} id={`${data.idItem}`}>
+        <div className="entry-history__item-edit entry-history__item_input-date">
+          <InputText id={'ff_date'} name={'date'} inputText={data.date} />
+        </div>
+        <div className="entry-history__item-edit entry-history__item_input-sum">
+          <InputText id={'ff_sum'} name={'sumEntry'} inputText={data.sum} placeholder={'1000'} />
+        </div>
+        <div className="entry-history__item-edit">
+          <InputText id={'ff_name'} name={'nameEntry'} inputText={data.name} placeholder={'наименование'} />
+        </div>
+        <ButtonSubmit text={'сохр.'} border={false} />
+      </form>
+    );
+  }
+
+  componentDidMount() {}
+}
 
 export default EntryHistory;
