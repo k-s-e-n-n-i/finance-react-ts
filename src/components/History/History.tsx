@@ -1,13 +1,14 @@
 import React from 'react';
 
-import EntryHistory from '../EntryHistory/EntryHistory';
+import { EntryHistoryMain } from '../EntryHistory/EntryHistoryMain';
+import { EntryHistoryEdit } from '../EntryHistory/EntryHistoryEdit';
 
-import { Entry, StateFF } from '../../modules/interfaces';
+import { Entry } from '../../modules/interfaces';
 type Props = {
   historyList: Entry[];
 };
 
-class History extends React.Component<Props, StateFF> {
+class History extends React.Component<Props> {
   static defaultProps = {
     date: 'дд.мм.гггг',
     sum: '0',
@@ -23,20 +24,31 @@ class History extends React.Component<Props, StateFF> {
   }
 
   render() {
-    console.log(`Новое historyList в History ${this.props.historyList[0]}`);
+    console.log(`Новое historyList в History ${JSON.stringify(this.props.historyList)}`);
 
     return (
       <div className="history">
-        {this.props.historyList.map((entry: Entry, index: number) => (
-          <EntryHistory
-            date={entry.date}
-            sum={entry.sum}
-            name={entry.name}
-            idItem={entry.id}
-            state={entry.state}
-            key={`${entry.id}${index}`}
-          />
-        ))}
+        {this.props.historyList.map((entry: Entry, index: number) =>
+          entry.state === 'edit' ? (
+            <EntryHistoryEdit
+              date={entry.date}
+              sum={entry.sum}
+              name={entry.name}
+              idItem={entry.id}
+              state={entry.state}
+              key={`${entry.id}${index}`}
+            />
+          ) : (
+            <EntryHistoryMain
+              date={entry.date}
+              sum={entry.sum}
+              name={entry.name}
+              idItem={entry.id}
+              state={entry.state}
+              key={`${entry.id}${index}`}
+            />
+          )
+        )}
       </div>
     );
   }
