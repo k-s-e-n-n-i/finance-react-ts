@@ -10,6 +10,7 @@ import { HistoryList } from '../../modules/interfaces';
 
 interface Props {
   caption: string;
+  name: string;
   type: string;
   classBlock: string;
 }
@@ -17,6 +18,7 @@ interface Props {
 class FormFinance extends React.Component<Props, HistoryList> {
   static defaultProps = {
     caption: 'Имя формы',
+    name: '',
     type: '',
     classBlock: '',
   };
@@ -34,14 +36,14 @@ class FormFinance extends React.Component<Props, HistoryList> {
 
   render() {
     let {
-      data: { caption },
+      data: { caption, name },
     } = this;
 
     return (
       <div className="form-finance">
         <h1 className="form-finance__topic">{caption}</h1>
 
-        <form className="form-finance__ff-send" name="formFinance">
+        <form className="form-finance__ff-send" name={name}>
           <div className="form-finance__item form-finance__item_input-date">
             <InputText id={'ff_date'} name={'date'} />
           </div>

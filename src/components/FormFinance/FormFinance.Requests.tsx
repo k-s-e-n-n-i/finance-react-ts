@@ -1,14 +1,16 @@
 class Requests {
   formSearchRoom: HTMLFormElement | null = null;
   formFinance: HTMLFormElement | null = null;
+  formExpenses: HTMLFormElement | null = null;
   arrNamesFormsEntry: string[] = [];
   constructor() {
     this.formSearchRoom = document.forms.namedItem('formSearchRoom');
     this.formFinance = document.forms.namedItem('formFinance');
+    this.formExpenses = document.forms.namedItem('formExpenses');
   }
 
   getHistory(hl: React.Component) {
-    const { formFinance } = this;
+    const { formFinance, formExpenses } = this;
     let { arrNamesFormsEntry } = this;
 
     if (!window.WebSocket) {
@@ -19,6 +21,9 @@ class Requests {
 
     if (formFinance) {
       this.sendMessAddFinance(socket, formFinance);
+    }
+    if (formExpenses) {
+      this.sendMessAddFinance(socket, formExpenses);
     }
 
     socket.onopen = () => {
@@ -36,9 +41,9 @@ class Requests {
 
         const data = JSON.parse(incomingMessage);
 
-        if (data.finance !== undefined) {
+        if (data[data.form] !== undefined) {
           hl.setState({
-            historyList: data.finance,
+            historyList: data[data.form],
           });
         }
 

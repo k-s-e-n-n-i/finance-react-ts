@@ -45,7 +45,14 @@ function checkGetData(messageToString) {
 
     if (getDataFile.finance !== undefined) {
       for (const client of clients) {
-        const getJSON = JSON.stringify({ finance: getDataFile.finance });
+        const getJSON = JSON.stringify({ finance: getDataFile.finance, form: 'finance' });
+        client.send(getJSON);
+      }
+    }
+
+    if (getDataFile.formExpenses !== undefined) {
+      for (const client of clients) {
+        const getJSON = JSON.stringify({ finance: getDataFile.formExpenses, form: 'formExpenses' });
         client.send(getJSON);
       }
     }
@@ -63,6 +70,7 @@ function checkAddFinance(messageToString) {
         const getJSON = JSON.stringify({
           addFinance: `Данные зафиксированы`,
           finance: getDataFile.finance,
+          form: 'finance',
         });
         client.send(getJSON);
       }
