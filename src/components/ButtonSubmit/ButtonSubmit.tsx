@@ -3,7 +3,7 @@ import './ButtonSubmit.scss';
 
 type Props = {
   text: string;
-  link?: string;
+  name?: string;
   height?: string;
   border?: boolean;
   arrow?: boolean;
@@ -13,7 +13,7 @@ type Props = {
 class ButtonSubmit extends React.Component<Props> {
   static defaultProps = {
     text: 'Текст',
-    link: './link-stub',
+    name: '',
     height: 'wide',
     border: true,
     arrow: false,
@@ -28,7 +28,7 @@ class ButtonSubmit extends React.Component<Props> {
   }
   render() {
     let {
-      data: { text, height, border, arrow, hover },
+      data: { text, name, height, border, arrow, hover },
     } = this;
 
     return (
@@ -49,6 +49,7 @@ class ButtonSubmit extends React.Component<Props> {
               : ' button-submit__block_gradient ' + (arrow ? 'button-submit__block_gradient_arrow' : ''))
           }
           value={text}
+          name={name}
         ></input>
         {arrow ? <div className="button-submit__arrow button-submit__arrow_white"></div> : ''}
         {border ? (
