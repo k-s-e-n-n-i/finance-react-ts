@@ -41,7 +41,7 @@ class Requests {
     };
 
     socket.onerror = function (error: Event) {
-      //alert('Ошибка ' + error);
+      alert(`Ошибка ${error} (не запущен сервер)`);
     };
   }
 
