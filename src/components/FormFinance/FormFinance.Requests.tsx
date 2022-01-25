@@ -108,10 +108,31 @@ class Requests {
     arrNamesFormsEntry.forEach((item) => {
       const form = document.forms.namedItem(item);
 
-      if (form) {
+      if (form && form.classList.contains('entry-history_main')) {
         this.sendEditEntry(socket, form);
       }
+      if (form && form.classList.contains('entry-history_edit')) {
+        this.sendSaveEntry(socket, form);
+      }
     });
+  }
+
+  sendSaveEntry(socket: WebSocket, form: HTMLFormElement) {
+    form.onsubmit = () => {
+      console.log('saved', form);
+      const postJSON = {
+        saveEntry: {
+          id: form.getAttribute('id'),
+          date: form.date.value,
+          sum: form.sumEntry.value,
+          name: form.nameEntry.value,
+          state: 'main',
+        },
+      };
+      console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+      socket.send(JSON.stringify(postJSON));
+      return false;
+    };
   }
 }
 

@@ -16,6 +16,7 @@ webSocketServer.on('connection', function (ws) {
     checkGetData(messageToString);
     checkAddFinance(messageToString);
     checkEditEntry(messageToString);
+    checkSaveEntry(messageToString);
   });
 
   ws.on('close', function () {
@@ -76,32 +77,63 @@ function checkAddFinance(messageToString) {
 
 function checkEditEntry(messageToString) {
   if (messageToString.editEntry !== undefined) {
-    const idEdit = parseInt(messageToString.editEntry.id);
+    const editEntry = messageToString.editEntry;
+    const idEdit = parseInt(editEntry.id);
 
-    let newJSON = {},
-      newFin = [];
+    updateEntrys(idEdit, editEntry, 'edit');
+  }
+}
 
-    const getDataFile = getDataFromFile();
-    getDataFile.finance.forEach((item) => {
-      if (item.id === idEdit) {
-        console.log(`Я нашел запись: ${item}`);
+function checkSaveEntry(messageToString) {
+  if (messageToString.saveEntry !== undefined) {
+    const saveEntry = messageToString.saveEntry;
+    const idEdit = parseInt(saveEntry.id);
 
-        newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: 'edit' });
-      } else {
-        newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });
+    updateEntrys(idEdit, saveEntry, 'save');
+  }
+}
+
+function updateEntrys(idEntry, objData, typeRequest) {
+  let newJSON = {},
+    newFin = [];
+
+  const getDataFile = getDataFromFile();
+  getDataFile.finance.forEach((item) => {
+    if (item.id === idEntry) {
+      console.log(`Я нашел запись c id ${idEntry}`);
+
+      if (typeRequest === 'save') {
+        newFin.push({
+          date: objData.date,
+          sum: objData.sum,
+          name: objData.name,
+          id: item.id,
+          state: objData.state,
+        });
       }
-    });
-
-    newJSON = Object.assign(getDataFile, { finance: newFin });
-
-    fs.writeFileSync('data.json', JSON.stringify(newJSON));
-    const json = getDataFromFile();
-    console.log(`\n Перезаписан data.json: изменено состояние id=${idEdit} на 'edit' \n`);
-
-    const sendJSON = JSON.stringify({ finance: json.finance });
-    for (const client of clients) {
-      client.send(sendJSON);
+      if (typeRequest === 'edit') {
+        newFin.push({
+          date: item.date,
+          sum: item.sum,
+          name: item.name,
+          id: item.id,
+          state: 'edit',
+        });
+      }
+    } else {
+      newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });
     }
+  });
+
+  newJSON = Object.assign(getDataFile, { finance: newFin });
+
+  fs.writeFileSync('data.json', JSON.stringify(newJSON));
+  const json = getDataFromFile();
+  console.log(`\n Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest}) \n`);
+
+  const sendJSON = JSON.stringify({ finance: json.finance });
+  for (const client of clients) {
+    client.send(sendJSON);
   }
 }
 

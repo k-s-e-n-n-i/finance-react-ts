@@ -31,7 +31,7 @@ export class EntryHistoryEdit extends React.Component<Props> {
       data: { date, idItem, sum, name },
     } = this;
     return (
-      <form className="entry-history edit" name={`entry${idItem}`} id={`${idItem}`}>
+      <form className="entry-history entry-history_edit" name={`entry${idItem}`} id={`${idItem}`}>
         <div className="entry-history__item-edit entry-history__item_input-date">
           <InputText id={'ff_date'} name={'date'} inputText={date} />
         </div>

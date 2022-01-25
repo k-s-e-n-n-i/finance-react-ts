@@ -30,7 +30,7 @@ export class EntryHistoryMain extends React.Component<Props> {
       data: { date, idItem, sum, name },
     } = this;
     return (
-      <form className="entry-history main" name={`entry${idItem}`} id={`${idItem}`}>
+      <form className="entry-history entry-history_main" name={`entry${idItem}`} id={`${idItem}`}>
         <p className="entry-history__item">{date}</p>
         <p className="entry-history__item">{sum}</p>
         <p className="entry-history__item">{name}</p>
