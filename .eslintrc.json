@@ -5,10 +5,9 @@
   "rules": {
     "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
   },
-  "plugins": [
-    "prettier"
-  ],
+  "plugins": ["prettier", "react"],
   "parserOptions": {
     "sourceType": "module"
-  }
+  },
+  "extends": ["plugin:react/recommended"]
 }
