@@ -112,27 +112,49 @@ class Requests {
         this.sendEditEntry(socket, form);
       }
       if (form && form.classList.contains('entry-history_edit')) {
-        this.sendSaveEntry(socket, form);
+        this.checkEditForm(socket, form);
       }
     });
   }
 
-  sendSaveEntry(socket: WebSocket, form: HTMLFormElement) {
-    form.onsubmit = () => {
+  checkEditForm(socket: WebSocket, form: HTMLFormElement) {
+    form.onsubmit = (e) => {
       console.log('saved', form);
-      const postJSON = {
-        saveEntry: {
-          id: form.getAttribute('id'),
-          date: form.date.value,
-          sum: form.sumEntry.value,
-          name: form.nameEntry.value,
-          state: 'main',
-        },
-      };
-      console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
-      socket.send(JSON.stringify(postJSON));
+
+      const nameButtonClick = e.submitter?.getAttribute('name');
+      if (nameButtonClick === 'save') {
+        this.sendSaveEntry(socket, form);
+      }
+      if (nameButtonClick === 'delete') {
+        this.sendDeleteEntry(socket, form);
+      }
+
       return false;
     };
+  }
+
+  sendSaveEntry(socket: WebSocket, form: HTMLFormElement) {
+    const postJSON = {
+      saveEntry: {
+        id: form.getAttribute('id'),
+        date: form.date.value,
+        sum: form.sumEntry.value,
+        name: form.nameEntry.value,
+        state: 'main',
+      },
+    };
+    console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+    socket.send(JSON.stringify(postJSON));
+  }
+
+  sendDeleteEntry(socket: WebSocket, form: HTMLFormElement) {
+    const postJSON = {
+      deleteEntry: {
+        id: form.getAttribute('id'),
+      },
+    };
+    console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+    socket.send(JSON.stringify(postJSON));
   }
 }
 

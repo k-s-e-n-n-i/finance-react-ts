@@ -17,6 +17,7 @@ webSocketServer.on('connection', function (ws) {
     checkAddFinance(messageToString);
     checkEditEntry(messageToString);
     checkSaveEntry(messageToString);
+    checkDeleteEntry(messageToString);
   });
 
   ws.on('close', function () {
@@ -93,6 +94,15 @@ function checkSaveEntry(messageToString) {
   }
 }
 
+function checkDeleteEntry(messageToString) {
+  if (messageToString.deleteEntry !== undefined) {
+    const deleteEntry = messageToString.deleteEntry;
+    const idEdit = parseInt(deleteEntry.id);
+
+    updateEntrys(idEdit, deleteEntry, 'delete');
+  }
+}
+
 function updateEntrys(idEntry, objData, typeRequest) {
   let newJSON = {},
     newFin = [];
@@ -119,6 +129,8 @@ function updateEntrys(idEntry, objData, typeRequest) {
           id: item.id,
           state: 'edit',
         });
+      }
+      if (typeRequest === 'delete') {
       }
     } else {
       newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });

@@ -14,4 +14,10 @@
   &__item_input-sum {
     width: 115px;
   }
+
+  &__item-edit_buttons {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-column-gap: 5px;
+  }
 }

@@ -41,7 +41,10 @@ export class EntryHistoryEdit extends React.Component<Props> {
         <div className="entry-history__item-edit">
           <InputText id={'ff_name'} name={'nameEntry'} inputText={name} placeholder={'наименование'} />
         </div>
-        <ButtonSubmit text={'сохр.'} border={false} />
+        <div className="entry-history__item-edit entry-history__item-edit_buttons">
+          <ButtonSubmit text={'сохр.'} border={false} name="save" />
+          <ButtonSubmit text={'X'} name="delete" />
+        </div>
       </form>
     );
   }

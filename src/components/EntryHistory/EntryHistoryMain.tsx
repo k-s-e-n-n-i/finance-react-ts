@@ -34,7 +34,7 @@ export class EntryHistoryMain extends React.Component<Props> {
         <p className="entry-history__item">{date}</p>
         <p className="entry-history__item">{sum}</p>
         <p className="entry-history__item">{name}</p>
-        <ButtonSubmit text={'ред.'} />
+        <ButtonSubmit text={'ред.'} name="edit" />
       </form>
     );
   }
