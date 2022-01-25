@@ -33,9 +33,18 @@
     grid-auto-rows: 10px;
   }
 
+  &__item_1-5 {
+    grid-column-start: 1;
+    grid-column-end: 5;
+  }
+
   &__item_input-date,
   &__item_input-sum {
     width: 115px;
+  }
+
+  &__notification {
+    color: red;
   }
 
   &__hr-line {

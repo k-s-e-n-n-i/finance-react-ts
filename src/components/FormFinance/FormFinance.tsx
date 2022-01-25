@@ -54,6 +54,10 @@ class FormFinance extends React.Component<Props, HistoryList> {
           <div className="form-finance__item">
             <ButtonSubmit text={'Добавить'} border={false} />
           </div>
+
+          <div className="form-finance__item_1-5">
+            <p className="form-finance__notification"></p>
+          </div>
         </form>
 
         <hr className="form-finance__hr-line "></hr>

@@ -45,6 +45,9 @@ export class EntryHistoryEdit extends React.Component<Props> {
           <ButtonSubmit text={'сохр.'} border={false} name="save" />
           <ButtonSubmit text={'X'} name="delete" />
         </div>
+        <div className="entry-history__item-edit entry-history__item-edit_1-5">
+          <p className="form-finance__notification"></p>
+        </div>
       </form>
     );
   }
