@@ -40,6 +40,7 @@ function checkGuests(message, messageToString) {
 
 function checkGetData(messageToString) {
   if (messageToString.getData !== undefined) {
+    runStart();
     const getDataFile = getDataFromFile();
 
     if (getDataFile.finance !== undefined) {
@@ -238,4 +239,26 @@ function sortData() {
 
   fs.writeFileSync('data.json', JSON.stringify(newFinance));
   console.log(`Данные отсортированы`);
+}
+
+function runStart() {
+  let newJSON = {},
+    newFin = [];
+
+  const getDataFile = getDataFromFile();
+  getDataFile.finance.forEach((item) => {
+    newFin.push({
+      date: item.date,
+      sum: item.sum,
+      name: item.name,
+      id: item.id,
+      state: 'main',
+    });
+  });
+
+  newJSON = Object.assign(getDataFile, { finance: newFin });
+
+  fs.writeFileSync('data.json', JSON.stringify(newJSON));
+
+  console.log(`\n Перезаписан data.json: изменено состояние на main \n`);
 }
