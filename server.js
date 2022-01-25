@@ -143,6 +143,8 @@ function updateEntrys(idEntry, objData, typeRequest) {
   const json = getDataFromFile();
   console.log(`\n Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest}) \n`);
 
+  sortData();
+
   const sendJSON = JSON.stringify({ finance: json.finance });
   for (const client of clients) {
     client.send(sendJSON);
@@ -167,6 +169,7 @@ function writeData(postJSON) {
 
   fs.writeFileSync('data.json', JSON.stringify(newJSON));
   genID();
+  sortData();
 
   const json = getDataFromFile();
   console.log('\n Перезаписан data.json:\n');
@@ -215,4 +218,24 @@ function genID() {
   } else {
     console.log(`Все записи имеют id`);
   }
+}
+
+function sortData() {
+  const getDataFile = getDataFromFile();
+  let fin = getDataFile.finance;
+
+  fin.sort((a, b) => {
+    if (a.date > b.date) {
+      return 1;
+    }
+    if (a.date < b.date) {
+      return -1;
+    }
+    return 0;
+  });
+
+  const newFinance = Object.assign({ finance: fin }, getDataFile);
+
+  fs.writeFileSync('data.json', JSON.stringify(newFinance));
+  console.log(`Данные отсортированы`);
 }
