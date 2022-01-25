@@ -57,16 +57,28 @@ class Requests {
 
   sendMessAddFinance(socket: WebSocket, form: HTMLFormElement) {
     form.onsubmit = () => {
-      const postJSON = {
-        finance: {
-          date: form.date.value,
-          sum: form.sumEntry.value,
-          name: form.nameEntry.value,
-          state: 'main',
-        },
-      };
-      console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
-      socket.send(JSON.stringify(postJSON));
+      const notification = form.querySelector('.form-finance__notification');
+      if (form.date.value !== '' && form.sumEntry.value !== '') {
+        const postJSON = {
+          finance: {
+            date: form.date.value,
+            sum: form.sumEntry.value,
+            name: form.nameEntry.value,
+            state: 'main',
+          },
+        };
+        console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+        socket.send(JSON.stringify(postJSON));
+
+        form.reset();
+        if (notification) {
+          notification.innerHTML = '';
+        }
+      } else {
+        if (notification) {
+          notification.innerHTML = 'Поля заполнены некорректно';
+        }
+      }
       return false;
     };
   }
@@ -134,17 +146,28 @@ class Requests {
   }
 
   sendSaveEntry(socket: WebSocket, form: HTMLFormElement) {
-    const postJSON = {
-      saveEntry: {
-        id: form.getAttribute('id'),
-        date: form.date.value,
-        sum: form.sumEntry.value,
-        name: form.nameEntry.value,
-        state: 'main',
-      },
-    };
-    console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
-    socket.send(JSON.stringify(postJSON));
+    const notification = form.querySelector('.form-finance__notification');
+    if (form.date.value !== '' && form.sumEntry.value !== '') {
+      const postJSON = {
+        saveEntry: {
+          id: form.getAttribute('id'),
+          date: form.date.value,
+          sum: form.sumEntry.value,
+          name: form.nameEntry.value,
+          state: 'main',
+        },
+      };
+      console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+      socket.send(JSON.stringify(postJSON));
+
+      if (notification) {
+        notification.innerHTML = '';
+      }
+    } else {
+      if (notification) {
+        notification.innerHTML = 'Поля заполнены некорректно';
+      }
+    }
   }
 
   sendDeleteEntry(socket: WebSocket, form: HTMLFormElement) {
