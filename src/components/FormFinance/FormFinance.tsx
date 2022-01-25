@@ -1,13 +1,12 @@
 import React from 'react';
 import './FormFinance.scss';
 
-import Button from '../button/button';
 import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
 import InputText from '../InputText/InputText';
 import History from '../History/History';
 
 import { Requests } from './FormFinance.Requests';
-import { HistoryList, Entry, StateFF } from '../../modules/interfaces';
+import { HistoryList } from '../../modules/interfaces';
 
 interface Props {
   caption: string;
@@ -15,7 +14,7 @@ interface Props {
   classBlock: string;
 }
 
-class FormFinance extends React.Component<Props, StateFF> {
+class FormFinance extends React.Component<Props, HistoryList> {
   static defaultProps = {
     caption: 'Имя формы',
     type: '',

@@ -28,7 +28,7 @@ class ButtonSubmit extends React.Component<Props> {
   }
   render() {
     let {
-      data: { text, link, height, border, arrow, hover },
+      data: { text, height, border, arrow, hover },
     } = this;
 
     return (

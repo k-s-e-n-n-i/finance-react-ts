@@ -3,12 +3,9 @@ import React from 'react';
 import { EntryHistoryMain } from '../EntryHistory/EntryHistoryMain';
 import { EntryHistoryEdit } from '../EntryHistory/EntryHistoryEdit';
 
-import { Entry } from '../../modules/interfaces';
-type Props = {
-  historyList: Entry[];
-};
+import { Entry, HistoryList } from '../../modules/interfaces';
 
-class History extends React.Component<Props> {
+class History extends React.Component<HistoryList> {
   static defaultProps = {
     date: 'дд.мм.гггг',
     sum: '0',
@@ -16,16 +13,14 @@ class History extends React.Component<Props> {
     id: '0',
   };
 
-  data: Props;
+  data: HistoryList;
 
-  constructor(props: Props) {
+  constructor(props: HistoryList) {
     super(props);
     this.data = this.props;
   }
 
   render() {
-    console.log(`Новое historyList в History ${JSON.stringify(this.props.historyList)}`);
-
     return (
       <div className="history">
         {this.props.historyList.map((entry: Entry, index: number) =>

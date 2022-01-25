@@ -349,7 +349,7 @@ class Dropdown {
       });
     }
 
-    fieldValues.forEach((item, i) => {
+    fieldValues.forEach((item) => {
       if (item != '') {
         outputPhrase == '' ? (outputPhrase = `${item}`) : (outputPhrase = `${outputPhrase}, ${item}`);
       }

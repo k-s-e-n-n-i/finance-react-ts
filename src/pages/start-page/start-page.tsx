@@ -2,8 +2,6 @@ import React from 'react';
 import './start-page.scss';
 import Link from '../../components/link/link';
 
-import { basename } from '../../modules/functions/functions';
-
 class StartPage extends React.Component {
   render() {
     return (

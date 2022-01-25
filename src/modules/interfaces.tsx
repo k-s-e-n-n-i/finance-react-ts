@@ -9,7 +9,3 @@ export interface Entry {
 export interface HistoryList {
   historyList: Entry[];
 }
-
-export interface StateFF {
-  historyList: Entry[];
-}

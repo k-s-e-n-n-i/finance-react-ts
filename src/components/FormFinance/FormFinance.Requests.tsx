@@ -30,7 +30,7 @@ class Requests {
     };
 
     socket.onmessage = (event) => {
-      const promise = new Promise((resolve, reject) => {
+      const promise = new Promise((resolve) => {
         const incomingMessage = event.data;
         console.log(`Приняты данные: ${incomingMessage}`);
 
