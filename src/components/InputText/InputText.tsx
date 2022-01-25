@@ -1,5 +1,5 @@
 import React from 'react';
-import Cleave from 'cleave.js';
+import Cleave from 'cleave.js/react';
 
 import './InputText.scss';
 import TopicLabel from '../../components/topic-label/topic-label';
@@ -27,12 +27,10 @@ class InputText extends React.Component<Props> {
   };
 
   data: Props;
-  myRef: React.RefObject<HTMLInputElement>;
 
   constructor(props: Props) {
     super(props);
     this.data = this.props;
-    this.myRef = React.createRef();
   }
 
   checkSubscription(type: string) {
@@ -55,32 +53,32 @@ class InputText extends React.Component<Props> {
     return (
       <div className={`input-text ${this.checkSubscription(type)}`}>
         <TopicLabel topic={topic} label={label} />
-        <input
-          className={`input-text__input ${this.checkFocus(state)} ${this.checkNameDate(name)}`}
-          name={name}
-          placeholder={placeholder}
-          id={`inputText${id}`}
-          defaultValue={inputText}
-          ref={this.myRef}
-        ></input>
+        {name === 'date' ? (
+          <Cleave
+            type="text"
+            className={`input-text__input ${this.checkFocus(state)} ${this.checkNameDate(name)}`}
+            name={name}
+            placeholder={placeholder}
+            id={`inputText${id}`}
+            value={inputText}
+            options={{
+              date: true,
+              delimiter: '.',
+              datePattern: ['d', 'm', 'Y'],
+            }}
+          />
+        ) : (
+          <input
+            type="text"
+            className={`input-text__input ${this.checkFocus(state)} ${this.checkNameDate(name)}`}
+            name={name}
+            placeholder={placeholder}
+            id={`inputText${id}`}
+            defaultValue={inputText}
+          ></input>
+        )}
       </div>
     );
-  }
-
-  componentDidMount() {
-    const inputDate = this.myRef.current;
-
-    if (inputDate?.classList.contains('.input-text__input_date')) {
-      this.runInputsDate();
-    }
-  }
-
-  runInputsDate() {
-    new Cleave('.input-text__input_date', {
-      date: true,
-      delimiter: '.',
-      datePattern: ['d', 'm', 'Y'],
-    });
   }
 }
 
