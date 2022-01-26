@@ -40,7 +40,7 @@ function checkGuests(message, messageToString) {
 
 function checkGetData(messageToString) {
   if (messageToString.getData !== undefined) {
-    runStart();
+    runStart(messageToString.getData);
     const getDataFile = getDataFromFile();
 
     if (getDataFile[messageToString.getData] !== undefined) {
@@ -113,40 +113,46 @@ function checkDeleteEntry(messageToString) {
 }
 
 function updateEntrys(idEntry, objData, typeRequest) {
+  const formName = objData.formName;
   let newJSON = {},
     newFin = [];
 
   const getDataFile = getDataFromFile();
-  getDataFile.finance.forEach((item) => {
-    if (item.id === idEntry) {
-      console.log(`Я нашел запись c id ${idEntry}`);
 
-      if (typeRequest === 'save') {
-        newFin.push({
-          date: objData.date,
-          sum: objData.sum,
-          name: objData.name,
-          id: item.id,
-          state: objData.state,
-        });
-      }
-      if (typeRequest === 'edit') {
-        newFin.push({
-          date: item.date,
-          sum: item.sum,
-          name: item.name,
-          id: item.id,
-          state: 'edit',
-        });
-      }
-      if (typeRequest === 'delete') {
-      }
-    } else {
-      newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });
-    }
-  });
+  if (getDataFile[formName] != undefined) {
+    getDataFile[formName].forEach((item) => {
+      if (parseInt(item.id) === idEntry) {
+        console.log(`Я нашел запись c id ${idEntry}`);
 
-  newJSON = Object.assign(getDataFile, { finance: newFin });
+        if (typeRequest === 'save') {
+          newFin.push({
+            date: objData.date,
+            sum: objData.sum,
+            name: objData.name,
+            id: item.id,
+            state: objData.state,
+          });
+        }
+        if (typeRequest === 'edit') {
+          newFin.push({
+            date: item.date,
+            sum: item.sum,
+            name: item.name,
+            id: item.id,
+            state: 'edit',
+          });
+        }
+        if (typeRequest === 'delete') {
+        }
+
+        return;
+      } else {
+        newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });
+      }
+    });
+  }
+
+  newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
   fs.writeFileSync('data.json', JSON.stringify(newJSON));
   const json = getDataFromFile();
@@ -154,7 +160,10 @@ function updateEntrys(idEntry, objData, typeRequest) {
 
   sortData();
 
-  const sendJSON = JSON.stringify({ finance: json.finance });
+  const sendJSON = JSON.stringify({
+    form: formName,
+    [formName]: json[formName],
+  });
   for (const client of clients) {
     client.send(sendJSON);
   }
@@ -170,7 +179,7 @@ function writeData(postJSON) {
     }
   }
 
-  Object.keys(getJSON).forEach((key, i) => {
+  Object.keys(getJSON).forEach((key) => {
     if (postJSON[key] != null) {
       newJSON[key] = [].concat(getJSON[key], postJSON[key]);
     }
@@ -213,12 +222,12 @@ function sortData() {
   console.log(`Данные отсортированы`);
 }
 
-function runStart() {
+function runStart(formName) {
   let newJSON = {},
     newFin = [];
 
   const getDataFile = getDataFromFile();
-  getDataFile.finance.forEach((item) => {
+  getDataFile[formName].forEach((item) => {
     newFin.push({
       date: item.date,
       sum: item.sum,
@@ -228,7 +237,7 @@ function runStart() {
     });
   });
 
-  newJSON = Object.assign(getDataFile, { finance: newFin });
+  newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
   fs.writeFileSync('data.json', JSON.stringify(newJSON));
 

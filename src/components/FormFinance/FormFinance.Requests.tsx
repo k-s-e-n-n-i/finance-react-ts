@@ -1,11 +1,22 @@
 class Requests {
   arrNamesFormsEntry: string[] = [];
+  formSend: HTMLFormElement | null;
+  nameFormSend: string | null | undefined = '';
+  compFormFinance: React.Component;
 
-  constructor() {}
+  /**
+   *
+   * @param compFormFinance - this у компонента FormFinance
+   * @param form - родительский блок всего компонента FormFinance ('.form-finance')
+   */
+  constructor(compFormFinance: React.Component, form: HTMLElement) {
+    this.formSend = form.querySelector('.form-finance__ff-send');
+    this.nameFormSend = this.formSend?.getAttribute('name');
+    this.compFormFinance = compFormFinance;
+  }
 
-  getHistory(hl: React.Component, form: HTMLElement) {
-    const {} = this;
-    let { arrNamesFormsEntry } = this;
+  getHistory() {
+    let { arrNamesFormsEntry, formSend, nameFormSend, compFormFinance } = this;
 
     if (!window.WebSocket) {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
@@ -13,18 +24,15 @@ class Requests {
 
     var socket = new WebSocket('ws://localhost:9001');
 
-    const formSend: HTMLFormElement | null = form.querySelector('.form-finance__ff-send');
-    const nameFormSend = formSend?.getAttribute('name');
-
     if (formSend && nameFormSend) {
-      this.sendMessAddFinance(socket, formSend, nameFormSend);
+      this.sendMessAddFinance(socket, formSend);
     }
 
     socket.onopen = () => {
       console.log('Соединение установлено.');
 
       if (nameFormSend) {
-        this.sendMessGetData(socket, nameFormSend);
+        this.sendMessGetData(socket);
       }
     };
 
@@ -37,7 +45,7 @@ class Requests {
         const formName = data.form;
 
         if (nameFormSend === formName && data[formName] !== undefined) {
-          hl.setState({
+          compFormFinance.setState({
             [formName]: {
               historyList: data[formName],
             },
@@ -49,7 +57,9 @@ class Requests {
       });
 
       promise.then(() => {
-        this.checkFormsEntry(socket, arrNamesFormsEntry);
+        if (nameFormSend) {
+          this.checkFormsEntry(socket, arrNamesFormsEntry);
+        }
       });
     };
 
@@ -58,7 +68,9 @@ class Requests {
     };
   }
 
-  sendMessAddFinance(socket: WebSocket, form: HTMLFormElement, nameFormSend: string) {
+  sendMessAddFinance(socket: WebSocket, form: HTMLFormElement) {
+    const { nameFormSend } = this;
+
     form.onsubmit = () => {
       const notification = form.querySelector('.form-finance__notification');
       if (form.date.value !== '' && form.sumEntry.value !== '') {
@@ -88,9 +100,10 @@ class Requests {
     };
   }
 
-  sendMessGetData(socket: WebSocket, formName: string) {
+  sendMessGetData(socket: WebSocket) {
+    const { nameFormSend } = this;
     const postJSON = {
-      getData: formName,
+      getData: nameFormSend,
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
@@ -98,11 +111,13 @@ class Requests {
   }
 
   sendEditEntry(socket: WebSocket, form: HTMLFormElement) {
+    const { nameFormSend } = this;
     form.onsubmit = () => {
       console.log('edit', form);
       const postJSON = {
         editEntry: {
           id: form.getAttribute('id'),
+          formName: nameFormSend,
         },
       };
       console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
@@ -151,6 +166,7 @@ class Requests {
   }
 
   sendSaveEntry(socket: WebSocket, form: HTMLFormElement) {
+    const { nameFormSend } = this;
     const notification = form.querySelector('.form-finance__notification');
     if (form.date.value !== '' && form.sumEntry.value !== '') {
       const postJSON = {
@@ -160,6 +176,7 @@ class Requests {
           sum: form.sumEntry.value,
           name: form.nameEntry.value,
           state: 'main',
+          formName: nameFormSend,
         },
       };
       console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
@@ -176,9 +193,11 @@ class Requests {
   }
 
   sendDeleteEntry(socket: WebSocket, form: HTMLFormElement) {
+    const { nameFormSend } = this;
     const postJSON = {
       deleteEntry: {
         id: form.getAttribute('id'),
+        formName: nameFormSend,
       },
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);

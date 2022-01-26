@@ -82,9 +82,9 @@ class FormFinance extends React.Component<Props, State> {
 
   componentDidMount() {
     const form = this.refForm.current;
-    const socket = new Requests();
     if (form) {
-      socket.getHistory(this, form);
+      const socket = new Requests(this, form);
+      socket.getHistory();
     }
   }
 }
