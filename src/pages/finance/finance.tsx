@@ -9,7 +9,7 @@ class Finance extends React.Component<{}> {
         <div className="finance__content-container">
           <div className="finance__form-search-num">
             <FormFinance name="formFinance" />
-            {/* <FormFinance name="formExpenses" /> */}
+            <FormFinance name="formExpenses" />
           </div>
         </div>
       </main>
