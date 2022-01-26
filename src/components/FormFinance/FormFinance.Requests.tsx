@@ -1,5 +1,6 @@
 class Requests {
   arrNamesFormsEntry: string[] = [];
+  formGeneral: HTMLElement;
   formSend: HTMLFormElement | null;
   nameFormSend: string | null | undefined = '';
   compFormFinance: React.Component;
@@ -10,6 +11,7 @@ class Requests {
    * @param form - родительский блок всего компонента FormFinance ('.form-finance')
    */
   constructor(compFormFinance: React.Component, form: HTMLElement) {
+    this.formGeneral = form;
     this.formSend = form.querySelector('.form-finance__ff-send');
     this.nameFormSend = this.formSend?.getAttribute('name');
     this.compFormFinance = compFormFinance;
@@ -22,7 +24,7 @@ class Requests {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
     }
 
-    var socket = new WebSocket('ws://localhost:9001');
+    const socket = new WebSocket('ws://localhost:9001');
 
     if (formSend && nameFormSend) {
       this.sendMessAddFinance(socket, formSend);
@@ -37,14 +39,13 @@ class Requests {
     };
 
     socket.onmessage = (event) => {
+      const incomingMessage = event.data;
+      const data = JSON.parse(incomingMessage);
+      const formName = data.form;
+
       const promise = new Promise((resolve) => {
-        const incomingMessage = event.data;
-        console.log(`Приняты данные: ${incomingMessage}`);
-
-        const data = JSON.parse(incomingMessage);
-        const formName = data.form;
-
         if (nameFormSend === formName && data[formName] !== undefined) {
+          console.log(`Приняты и обновлены данные: ${incomingMessage}`);
           compFormFinance.setState({
             [formName]: {
               historyList: data[formName],
@@ -57,7 +58,7 @@ class Requests {
       });
 
       promise.then(() => {
-        if (nameFormSend) {
+        if (nameFormSend === formName) {
           this.checkFormsEntry(socket, arrNamesFormsEntry);
         }
       });
@@ -127,7 +128,8 @@ class Requests {
   }
 
   checkFormsEntry(socket: WebSocket, arrNamesFormsEntry: string[]) {
-    const mas = document.querySelectorAll('form.entry-history');
+    const { formGeneral } = this;
+    const mas = formGeneral.querySelectorAll('form.entry-history');
     arrNamesFormsEntry = [];
 
     mas.forEach((item) => {
