@@ -43,16 +43,12 @@ function checkGetData(messageToString) {
     runStart();
     const getDataFile = getDataFromFile();
 
-    if (getDataFile.finance !== undefined) {
+    if (getDataFile[messageToString.getData] !== undefined) {
       for (const client of clients) {
-        const getJSON = JSON.stringify({ finance: getDataFile.finance, form: 'finance' });
-        client.send(getJSON);
-      }
-    }
-
-    if (getDataFile.formExpenses !== undefined) {
-      for (const client of clients) {
-        const getJSON = JSON.stringify({ finance: getDataFile.formExpenses, form: 'formExpenses' });
+        const getJSON = JSON.stringify({
+          form: messageToString.getData,
+          [messageToString.getData]: getDataFile[messageToString.getData],
+        });
         client.send(getJSON);
       }
     }
@@ -60,17 +56,21 @@ function checkGetData(messageToString) {
 }
 
 function checkAddFinance(messageToString) {
-  if (messageToString.finance !== undefined) {
-    writeData(messageToString);
+  if (messageToString.addFinance !== undefined) {
+    const formName = messageToString.formName;
+
+    writeData({
+      [formName]: messageToString.addFinance,
+    });
 
     const getDataFile = getDataFromFile();
 
-    if (getDataFile.finance !== undefined) {
+    if (getDataFile[formName] !== undefined) {
       for (const client of clients) {
         const getJSON = JSON.stringify({
           addFinance: `Данные зафиксированы`,
-          finance: getDataFile.finance,
-          form: 'finance',
+          form: formName,
+          [formName]: getDataFile[formName],
         });
         client.send(getJSON);
       }
@@ -231,21 +231,25 @@ function genID() {
 
 function sortData() {
   const getDataFile = getDataFromFile();
-  let fin = getDataFile.finance;
+  const forms = ['formFinance', 'formExpenses'];
+  let fin;
+  forms.forEach((formName) => {
+    fin = getDataFile[formName];
 
-  fin.sort((a, b) => {
-    if (a.date > b.date) {
-      return 1;
-    }
-    if (a.date < b.date) {
-      return -1;
-    }
-    return 0;
+    fin.sort((a, b) => {
+      if (a.date > b.date) {
+        return 1;
+      }
+      if (a.date < b.date) {
+        return -1;
+      }
+      return 0;
+    });
+
+    const newFinance = Object.assign({ [formName]: fin }, getDataFile);
+
+    fs.writeFileSync('data.json', JSON.stringify(newFinance));
   });
-
-  const newFinance = Object.assign({ finance: fin }, getDataFile);
-
-  fs.writeFileSync('data.json', JSON.stringify(newFinance));
   console.log(`Данные отсортированы`);
 }
 

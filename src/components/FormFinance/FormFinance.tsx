@@ -15,7 +15,13 @@ interface Props {
   classBlock: string;
 }
 
-class FormFinance extends React.Component<Props, HistoryList> {
+interface State {
+  form: string;
+  formFinance: HistoryList;
+  formExpenses: HistoryList;
+}
+
+class FormFinance extends React.Component<Props, State> {
   static defaultProps = {
     caption: 'Имя формы',
     name: '',
@@ -24,23 +30,28 @@ class FormFinance extends React.Component<Props, HistoryList> {
   };
 
   data: Props;
+  refForm: React.RefObject<HTMLDivElement>;
 
   constructor(props: Props) {
     super(props);
     this.data = this.props;
+    this.refForm = React.createRef();
 
     this.state = {
-      historyList: [],
+      form: '',
+      formFinance: { historyList: [] },
+      formExpenses: { historyList: [] },
     };
   }
 
   render() {
     let {
       data: { caption, name },
+      refForm,
     } = this;
 
     return (
-      <div className="form-finance">
+      <div className="form-finance" ref={refForm}>
         <h1 className="form-finance__topic">{caption}</h1>
 
         <form className="form-finance__ff-send" name={name}>
@@ -64,14 +75,17 @@ class FormFinance extends React.Component<Props, HistoryList> {
 
         <hr className="form-finance__hr-line "></hr>
 
-        <History historyList={this.state.historyList} />
+        <History stateForm={this.state} />
       </div>
     );
   }
 
   componentDidMount() {
+    const form = this.refForm.current;
     const socket = new Requests();
-    socket.getHistory(this);
+    if (form) {
+      socket.getHistory(this, form);
+    }
   }
 }
 

@@ -5,7 +5,15 @@ import { EntryHistoryEdit } from '../EntryHistory/EntryHistoryEdit';
 
 import { Entry, HistoryList } from '../../modules/interfaces';
 
-class History extends React.Component<HistoryList> {
+interface Props {
+  stateForm: {
+    form: string;
+    formFinance: HistoryList;
+    formExpenses: HistoryList;
+  };
+}
+
+class History extends React.Component<Props> {
   static defaultProps = {
     date: 'дд.мм.гггг',
     sum: '0',
@@ -13,17 +21,24 @@ class History extends React.Component<HistoryList> {
     id: '0',
   };
 
-  data: HistoryList;
+  data: Props;
 
-  constructor(props: HistoryList) {
+  constructor(props: Props) {
     super(props);
     this.data = this.props;
   }
 
   render() {
+    let hl;
+    if (this.props.stateForm.form === 'formFinance') {
+      hl = this.props.stateForm.formFinance.historyList;
+    }
+    if (this.props.stateForm.form === 'formExpenses') {
+      hl = this.props.stateForm.formExpenses.historyList;
+    }
     return (
       <div className="history">
-        {this.props.historyList.map((entry: Entry, index: number) =>
+        {hl?.map((entry: Entry, index: number) =>
           entry.state === 'edit' ? (
             <EntryHistoryEdit
               date={entry.date}

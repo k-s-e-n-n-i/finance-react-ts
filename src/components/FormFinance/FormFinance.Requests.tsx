@@ -1,16 +1,10 @@
 class Requests {
-  formSearchRoom: HTMLFormElement | null = null;
-  formFinance: HTMLFormElement | null = null;
-  formExpenses: HTMLFormElement | null = null;
   arrNamesFormsEntry: string[] = [];
-  constructor() {
-    this.formSearchRoom = document.forms.namedItem('formSearchRoom');
-    this.formFinance = document.forms.namedItem('formFinance');
-    this.formExpenses = document.forms.namedItem('formExpenses');
-  }
 
-  getHistory(hl: React.Component) {
-    const { formFinance, formExpenses } = this;
+  constructor() {}
+
+  getHistory(hl: React.Component, form: HTMLElement) {
+    const {} = this;
     let { arrNamesFormsEntry } = this;
 
     if (!window.WebSocket) {
@@ -19,18 +13,18 @@ class Requests {
 
     var socket = new WebSocket('ws://localhost:9001');
 
-    if (formFinance) {
-      this.sendMessAddFinance(socket, formFinance);
-    }
-    if (formExpenses) {
-      this.sendMessAddFinance(socket, formExpenses);
+    const formSend: HTMLFormElement | null = form.querySelector('.form-finance__ff-send');
+    const nameFormSend = formSend?.getAttribute('name');
+
+    if (formSend && nameFormSend) {
+      this.sendMessAddFinance(socket, formSend, nameFormSend);
     }
 
     socket.onopen = () => {
       console.log('Соединение установлено.');
 
-      if (formFinance) {
-        this.sendMessGetData(socket);
+      if (nameFormSend) {
+        this.sendMessGetData(socket, nameFormSend);
       }
     };
 
@@ -40,10 +34,14 @@ class Requests {
         console.log(`Приняты данные: ${incomingMessage}`);
 
         const data = JSON.parse(incomingMessage);
+        const formName = data.form;
 
-        if (data[data.form] !== undefined) {
+        if (nameFormSend === formName && data[formName] !== undefined) {
           hl.setState({
-            historyList: data[data.form],
+            [formName]: {
+              historyList: data[formName],
+            },
+            form: formName,
           });
         }
 
@@ -60,17 +58,18 @@ class Requests {
     };
   }
 
-  sendMessAddFinance(socket: WebSocket, form: HTMLFormElement) {
+  sendMessAddFinance(socket: WebSocket, form: HTMLFormElement, nameFormSend: string) {
     form.onsubmit = () => {
       const notification = form.querySelector('.form-finance__notification');
       if (form.date.value !== '' && form.sumEntry.value !== '') {
         const postJSON = {
-          finance: {
+          addFinance: {
             date: form.date.value,
             sum: form.sumEntry.value,
             name: form.nameEntry.value,
             state: 'main',
           },
+          formName: nameFormSend,
         };
         console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
         socket.send(JSON.stringify(postJSON));
@@ -88,9 +87,9 @@ class Requests {
     };
   }
 
-  sendMessGetData(socket: WebSocket) {
+  sendMessGetData(socket: WebSocket, formName: string) {
     const postJSON = {
-      getData: {},
+      getData: formName,
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
