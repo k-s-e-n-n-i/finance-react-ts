@@ -177,7 +177,6 @@ function writeData(postJSON) {
   });
 
   fs.writeFileSync('data.json', JSON.stringify(newJSON));
-  genID();
   sortData();
 
   const json = getDataFromFile();
@@ -188,45 +187,6 @@ function writeData(postJSON) {
 function getDataFromFile() {
   const getData = JSON.parse(fs.readFileSync('data.json', 'utf8'));
   return getData;
-}
-
-function genID() {
-  const getDataFile = getDataFromFile();
-  const arrID = [];
-  let valID = 1;
-  let needID = 0;
-  let newFinance = [];
-
-  getDataFile.finance.forEach((item) => {
-    if (item.id === undefined) {
-      needID = 1;
-    } else {
-      arrID.push(item.id);
-    }
-  });
-
-  if (needID) {
-    let count = 0;
-    if (arrID.length !== 0) {
-      valID = Math.max.apply(null, arrID) + 1;
-    }
-
-    getDataFile.finance.forEach((item) => {
-      if (item.id === undefined) {
-        const newItem = Object.assign(item, { id: valID });
-        newFinance.push(newItem);
-        valID++;
-        count++;
-      }
-    });
-
-    newFinance = Object.assign({ finance: newFinance }, getDataFile);
-
-    fs.writeFileSync('data.json', JSON.stringify(newFinance));
-    console.log(`Было присвоено ${count} id`);
-  } else {
-    console.log(`Все записи имеют id`);
-  }
 }
 
 function sortData() {

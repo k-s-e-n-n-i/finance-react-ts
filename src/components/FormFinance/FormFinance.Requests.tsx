@@ -68,6 +68,7 @@ class Requests {
             sum: form.sumEntry.value,
             name: form.nameEntry.value,
             state: 'main',
+            id: new Date().getTime(),
           },
           formName: nameFormSend,
         };
