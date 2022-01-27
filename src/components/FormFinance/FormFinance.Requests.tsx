@@ -75,6 +75,10 @@ class Requests {
     };
   }
 
+  /**
+   *
+   * @param form - форма добавления новой записи ('.form-finance__ff-send')
+   */
   sendMessAddFinance(form: HTMLFormElement) {
     const { socket, nameFormSend } = this;
 
@@ -116,6 +120,10 @@ class Requests {
     socket.send(JSON.stringify(postJSON));
   }
 
+  /**
+   *
+   * @param form - форма конкретной записи в списке истории ('.entry-history')
+   */
   sendEditEntry(form: HTMLFormElement) {
     const { socket, nameFormSend } = this;
     form.onsubmit = () => {
@@ -132,6 +140,10 @@ class Requests {
     };
   }
 
+  /**
+   *
+   * @param arrNamesFormsEntry - массив имен (name) форм записей ('.entry-history') в списке истории
+   */
   checkFormsEntry(arrNamesFormsEntry: string[]) {
     const { formGeneral } = this;
     const mas = formGeneral.querySelectorAll('form.entry-history');
@@ -156,6 +168,10 @@ class Requests {
     });
   }
 
+  /**
+   *
+   * @param form - форма конкретной записи в списке истории ('.entry-history')
+   */
   checkEditForm(form: HTMLFormElement) {
     form.onsubmit = (e) => {
       console.log('saved', form);
@@ -172,6 +188,10 @@ class Requests {
     };
   }
 
+  /**
+   *
+   * @param form - форма конкретной записи в списке истории ('.entry-history')
+   */
   sendSaveEntry(form: HTMLFormElement) {
     const { socket, nameFormSend } = this;
     const notification = form.querySelector('.form-finance__notification');
