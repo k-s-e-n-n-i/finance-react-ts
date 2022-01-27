@@ -1,9 +1,10 @@
 class Requests {
   arrNamesFormsEntry: string[] = [];
   formGeneral: HTMLElement;
-  formSend: HTMLFormElement | null;
+  formSend: HTMLFormElement | null = null;
   nameFormSend: string | null | undefined = '';
   compFormFinance: React.Component;
+  socket: WebSocket;
 
   /**
    *
@@ -12,29 +13,34 @@ class Requests {
    */
   constructor(compFormFinance: React.Component, form: HTMLElement) {
     this.formGeneral = form;
-    this.formSend = form.querySelector('.form-finance__ff-send');
-    this.nameFormSend = this.formSend?.getAttribute('name');
     this.compFormFinance = compFormFinance;
-  }
-
-  getHistory() {
-    let { arrNamesFormsEntry, formSend, nameFormSend, compFormFinance } = this;
+    this.init();
 
     if (!window.WebSocket) {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
     }
 
     const socket = new WebSocket('ws://localhost:9001');
+    this.socket = socket;
+  }
+
+  init() {
+    this.formSend = this.formGeneral.querySelector('.form-finance__ff-send');
+    this.nameFormSend = this.formSend?.getAttribute('name');
+  }
+
+  getHistory() {
+    let { socket, arrNamesFormsEntry, formSend, nameFormSend, compFormFinance } = this;
 
     if (formSend && nameFormSend) {
-      this.sendMessAddFinance(socket, formSend);
+      this.sendMessAddFinance(formSend);
     }
 
     socket.onopen = () => {
       console.log('Соединение установлено.');
 
       if (nameFormSend) {
-        this.sendMessGetData(socket);
+        this.sendMessGetData();
       }
     };
 
@@ -59,7 +65,7 @@ class Requests {
 
       promise.then(() => {
         if (nameFormSend === formName) {
-          this.checkFormsEntry(socket, arrNamesFormsEntry);
+          this.checkFormsEntry(arrNamesFormsEntry);
         }
       });
     };
@@ -69,8 +75,8 @@ class Requests {
     };
   }
 
-  sendMessAddFinance(socket: WebSocket, form: HTMLFormElement) {
-    const { nameFormSend } = this;
+  sendMessAddFinance(form: HTMLFormElement) {
+    const { socket, nameFormSend } = this;
 
     form.onsubmit = () => {
       const notification = form.querySelector('.form-finance__notification');
@@ -101,18 +107,17 @@ class Requests {
     };
   }
 
-  sendMessGetData(socket: WebSocket) {
-    const { nameFormSend } = this;
+  sendMessGetData() {
+    const { socket, nameFormSend } = this;
     const postJSON = {
       getData: nameFormSend,
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
-    return false;
   }
 
-  sendEditEntry(socket: WebSocket, form: HTMLFormElement) {
-    const { nameFormSend } = this;
+  sendEditEntry(form: HTMLFormElement) {
+    const { socket, nameFormSend } = this;
     form.onsubmit = () => {
       console.log('edit', form);
       const postJSON = {
@@ -127,7 +132,7 @@ class Requests {
     };
   }
 
-  checkFormsEntry(socket: WebSocket, arrNamesFormsEntry: string[]) {
+  checkFormsEntry(arrNamesFormsEntry: string[]) {
     const { formGeneral } = this;
     const mas = formGeneral.querySelectorAll('form.entry-history');
     arrNamesFormsEntry = [];
@@ -143,32 +148,32 @@ class Requests {
       const form = document.forms.namedItem(item);
 
       if (form && form.classList.contains('entry-history_main')) {
-        this.sendEditEntry(socket, form);
+        this.sendEditEntry(form);
       }
       if (form && form.classList.contains('entry-history_edit')) {
-        this.checkEditForm(socket, form);
+        this.checkEditForm(form);
       }
     });
   }
 
-  checkEditForm(socket: WebSocket, form: HTMLFormElement) {
+  checkEditForm(form: HTMLFormElement) {
     form.onsubmit = (e) => {
       console.log('saved', form);
 
       const nameButtonClick = e.submitter?.getAttribute('name');
       if (nameButtonClick === 'save') {
-        this.sendSaveEntry(socket, form);
+        this.sendSaveEntry(form);
       }
       if (nameButtonClick === 'delete') {
-        this.sendDeleteEntry(socket, form);
+        this.sendDeleteEntry(form);
       }
 
       return false;
     };
   }
 
-  sendSaveEntry(socket: WebSocket, form: HTMLFormElement) {
-    const { nameFormSend } = this;
+  sendSaveEntry(form: HTMLFormElement) {
+    const { socket, nameFormSend } = this;
     const notification = form.querySelector('.form-finance__notification');
     if (form.date.value !== '' && form.sumEntry.value !== '') {
       const postJSON = {
@@ -194,8 +199,8 @@ class Requests {
     }
   }
 
-  sendDeleteEntry(socket: WebSocket, form: HTMLFormElement) {
-    const { nameFormSend } = this;
+  sendDeleteEntry(form: HTMLFormElement) {
+    const { socket, nameFormSend } = this;
     const postJSON = {
       deleteEntry: {
         id: form.getAttribute('id'),
