@@ -1,6 +1,6 @@
 .entry-history {
   display: grid;
-  grid-template-columns: 1fr 1fr 2fr 1fr;
+  grid-template-columns: 105px 1fr 2fr 105px;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   align-items: center;
@@ -13,11 +13,6 @@
   &__item-edit_1-5 {
     grid-column-start: 1;
     grid-column-end: 5;
-  }
-
-  &__item_input-date,
-  &__item_input-sum {
-    width: 115px;
   }
 
   &__item-edit_buttons {

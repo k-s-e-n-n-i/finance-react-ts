@@ -8,8 +8,12 @@ class Finance extends React.Component<{}> {
       <main className="finance">
         <div className="finance__content-container">
           <div className="finance__form-search-num">
-            <FormFinance name="formFinance" />
-            <FormFinance name="formExpenses" />
+            <div className="finance__form-finance">
+              <FormFinance name="formFinance" />
+            </div>
+            <div className="finance__form-finance">
+              <FormFinance name="formExpenses" />
+            </div>
           </div>
         </div>
       </main>
