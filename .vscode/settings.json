@@ -1,3 +1,5 @@
 {
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "workbench.tree.renderIndentGuides": "always",
+  "editor.renderWhitespace": "all"
 }
