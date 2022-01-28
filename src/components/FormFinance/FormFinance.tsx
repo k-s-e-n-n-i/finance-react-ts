@@ -19,6 +19,7 @@ interface State {
   formUpdate: string;
   allForms: { [key: string]: HistoryList };
   arrNamesForms: string[];
+  allSumForm: number;
 }
 
 class FormFinance extends React.Component<Props, State> {
@@ -41,6 +42,7 @@ class FormFinance extends React.Component<Props, State> {
       formUpdate: '',
       allForms: {},
       arrNamesForms: ['formFinance', 'formExpenses', 'formForm', 'newForm', 'finance'],
+      allSumForm: 0,
     };
   }
 
@@ -76,6 +78,10 @@ class FormFinance extends React.Component<Props, State> {
         <hr className="form-finance__hr-line "></hr>
 
         <History stateForm={this.state} />
+
+        <hr className="form-finance__hr-line "></hr>
+
+        <div className="form-finance__total">Итого: {this.state.allSumForm}</div>
       </div>
     );
   }

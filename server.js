@@ -34,11 +34,14 @@ function checkGetData(messageToString) {
     const getDataFile = getDataFromFile(formName);
     sortData(formName);
 
+    const allSum = total(formName);
+
     if (getDataFile[formName] !== undefined) {
       for (const client of clients) {
         const getJSON = JSON.stringify({
           form: formName,
           [formName]: getDataFile[formName],
+          allSum: allSum,
         });
         client.send(getJSON);
       }
@@ -58,6 +61,7 @@ function checkAddFinance(messageToString) {
     );
 
     const getDataFile = getDataFromFile(formName);
+    const allSum = total(formName);
 
     if (getDataFile[formName] !== undefined) {
       for (const client of clients) {
@@ -65,6 +69,7 @@ function checkAddFinance(messageToString) {
           addFinance: `Данные зафиксированы`,
           form: formName,
           [formName]: getDataFile[formName],
+          allSum: allSum,
         });
         client.send(getJSON);
       }
@@ -154,10 +159,12 @@ function updateEntrys(idEntry, objData, typeRequest) {
   console.log(`\n Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest}) \n`);
 
   sortData(formName);
+  const allSum = total(formName);
 
   const sendJSON = JSON.stringify({
     form: formName,
     [formName]: json[formName],
+    allSum: allSum,
   });
   for (const client of clients) {
     client.send(sendJSON);
@@ -247,4 +254,22 @@ function runStart(formName) {
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
 
   console.log(`\n Перезаписан data.json: изменено состояние на main \n`);
+}
+
+//--------------------------------------------------------------
+
+function total(fileName) {
+  let getData,
+    sum = 0;
+  try {
+    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+    getData[fileName].forEach((item) => {
+      sum = sum + parseFloat(item.sum);
+    });
+  } catch (e) {
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify({}));
+    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+  }
+
+  return sum;
 }

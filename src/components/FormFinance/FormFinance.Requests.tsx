@@ -59,6 +59,7 @@ class Requests {
               },
             },
             formUpdate: formName,
+            allSumForm: data.allSum,
           });
         }
 
