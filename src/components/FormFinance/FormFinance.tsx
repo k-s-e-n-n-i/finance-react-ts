@@ -40,7 +40,7 @@ class FormFinance extends React.Component<Props, State> {
     this.state = {
       formUpdate: '',
       allForms: {},
-      arrNamesForms: ['formForm', 'formFinance', 'formExpenses'],
+      arrNamesForms: ['formFinance', 'formExpenses', 'formForm', 'newForm', 'finance'],
     };
   }
 

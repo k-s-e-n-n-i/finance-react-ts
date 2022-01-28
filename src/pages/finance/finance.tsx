@@ -14,9 +14,6 @@ class Finance extends React.Component<{}> {
             <div className="finance__form-finance">
               <FormFinance name="formExpenses" />
             </div>
-            <div className="finance__form-finance">
-              <FormFinance name="formForm" />
-            </div>
           </div>
         </div>
       </main>
