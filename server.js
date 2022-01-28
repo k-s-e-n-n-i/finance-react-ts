@@ -28,15 +28,17 @@ webSocketServer.on('connection', function (ws) {
 //--------------------------------------------------------------
 
 function checkGetData(messageToString) {
-  if (messageToString.getData !== undefined) {
-    runStart(messageToString.getData);
-    const getDataFile = getDataFromFile();
+  const formName = messageToString.getData;
+  if (formName !== undefined) {
+    runStart(formName);
+    const getDataFile = getDataFromFile(formName);
+    sortData(formName);
 
-    if (getDataFile[messageToString.getData] !== undefined) {
+    if (getDataFile[formName] !== undefined) {
       for (const client of clients) {
         const getJSON = JSON.stringify({
-          form: messageToString.getData,
-          [messageToString.getData]: getDataFile[messageToString.getData],
+          form: formName,
+          [formName]: getDataFile[formName],
         });
         client.send(getJSON);
       }
@@ -48,11 +50,14 @@ function checkAddFinance(messageToString) {
   if (messageToString.addFinance !== undefined) {
     const formName = messageToString.formName;
 
-    writeData({
-      [formName]: messageToString.addFinance,
-    });
+    writeData(
+      {
+        [formName]: messageToString.addFinance,
+      },
+      formName
+    );
 
-    const getDataFile = getDataFromFile();
+    const getDataFile = getDataFromFile(formName);
 
     if (getDataFile[formName] !== undefined) {
       for (const client of clients) {
@@ -103,10 +108,11 @@ function checkDeleteEntry(messageToString) {
 
 function updateEntrys(idEntry, objData, typeRequest) {
   const formName = objData.formName;
+  const fileName = formName;
   let newJSON = {},
     newFin = [];
 
-  const getDataFile = getDataFromFile();
+  const getDataFile = getDataFromFile(formName);
 
   if (getDataFile[formName] != undefined) {
     getDataFile[formName].forEach((item) => {
@@ -143,11 +149,11 @@ function updateEntrys(idEntry, objData, typeRequest) {
 
   newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
-  fs.writeFileSync('data.json', JSON.stringify(newJSON));
-  const json = getDataFromFile();
+  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
+  const json = getDataFromFile(formName);
   console.log(`\n Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest}) \n`);
 
-  sortData();
+  sortData(formName);
 
   const sendJSON = JSON.stringify({
     form: formName,
@@ -158,8 +164,9 @@ function updateEntrys(idEntry, objData, typeRequest) {
   }
 }
 
-function writeData(postJSON) {
-  let getJSON = getDataFromFile();
+function writeData(postJSON, formName) {
+  const fileName = formName;
+  let getJSON = getDataFromFile(formName);
   let newJSON = getJSON;
 
   for (let key in postJSON) {
@@ -174,26 +181,31 @@ function writeData(postJSON) {
     }
   });
 
-  fs.writeFileSync('data.json', JSON.stringify(newJSON));
-  sortData();
+  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
+  sortData(formName);
 
-  const json = getDataFromFile();
+  const json = getDataFromFile(formName);
   console.log('\n Перезаписан data.json:\n');
   return json;
 }
 
-function getDataFromFile() {
-  const getData = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+function getDataFromFile(fileName) {
+  let getData;
+  try {
+    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+  } catch (e) {
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify({}));
+    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+  }
   return getData;
 }
 
-function sortData() {
-  const getDataFile = getDataFromFile();
-  const forms = ['formFinance', 'formExpenses'];
-  let fin;
-  forms.forEach((formName) => {
-    fin = getDataFile[formName];
+function sortData(formName) {
+  const fileName = formName;
+  const getDataFile = getDataFromFile(formName);
+  let fin = getDataFile[formName];
 
+  if (fin !== undefined) {
     fin.sort((a, b) => {
       if (a.date > b.date) {
         return 1;
@@ -203,19 +215,21 @@ function sortData() {
       }
       return 0;
     });
+  }
 
-    const newFinance = Object.assign({ [formName]: fin }, getDataFile);
+  const newFinance = Object.assign({ [formName]: fin }, getDataFile);
 
-    fs.writeFileSync('data.json', JSON.stringify(newFinance));
-  });
+  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newFinance));
+
   console.log(`Данные отсортированы`);
 }
 
 function runStart(formName) {
+  const fileName = formName;
   let newJSON = {},
     newFin = [];
 
-  const getDataFile = getDataFromFile();
+  const getDataFile = getDataFromFile(formName);
   if (getDataFile[formName] !== undefined) {
     getDataFile[formName].forEach((item) => {
       newFin.push({
@@ -230,7 +244,7 @@ function runStart(formName) {
 
   newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
-  fs.writeFileSync('data.json', JSON.stringify(newJSON));
+  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
 
   console.log(`\n Перезаписан data.json: изменено состояние на main \n`);
 }
