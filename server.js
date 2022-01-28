@@ -12,7 +12,6 @@ webSocketServer.on('connection', function (ws) {
 
     const messageToString = JSON.parse(message);
 
-    checkGuests(message, messageToString);
     checkGetData(messageToString);
     checkAddFinance(messageToString);
     checkEditEntry(messageToString);
@@ -27,16 +26,6 @@ webSocketServer.on('connection', function (ws) {
 });
 
 //--------------------------------------------------------------
-
-function checkGuests(message, messageToString) {
-  if (messageToString.guests !== undefined) {
-    writeData(messageToString);
-
-    for (const client of clients) {
-      client.send(message);
-    }
-  }
-}
 
 function checkGetData(messageToString) {
   if (messageToString.getData !== undefined) {
