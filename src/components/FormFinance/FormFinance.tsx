@@ -16,9 +16,9 @@ interface Props {
 }
 
 interface State {
-  form: string;
-  formFinance: HistoryList;
-  formExpenses: HistoryList;
+  formUpdate: string;
+  allForms: { [key: string]: HistoryList };
+  arrNamesForms: string[];
 }
 
 class FormFinance extends React.Component<Props, State> {
@@ -38,9 +38,9 @@ class FormFinance extends React.Component<Props, State> {
     this.refForm = React.createRef();
 
     this.state = {
-      form: '',
-      formFinance: { historyList: [] },
-      formExpenses: { historyList: [] },
+      formUpdate: '',
+      allForms: {},
+      arrNamesForms: ['formForm', 'formFinance', 'formExpenses'],
     };
   }
 

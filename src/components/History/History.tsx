@@ -7,9 +7,9 @@ import { Entry, HistoryList } from '../../modules/interfaces';
 
 interface Props {
   stateForm: {
-    form: string;
-    formFinance: HistoryList;
-    formExpenses: HistoryList;
+    formUpdate: string;
+    allForms: { [key: string]: HistoryList };
+    arrNamesForms: string[];
   };
 }
 
@@ -29,16 +29,21 @@ class History extends React.Component<Props> {
   }
 
   render() {
-    let hl;
-    if (this.props.stateForm.form === 'formFinance') {
-      hl = this.props.stateForm.formFinance.historyList;
+    const {
+      props: {
+        stateForm: { arrNamesForms, formUpdate, allForms },
+      },
+    } = this;
+
+    let hl: Entry[] = [];
+
+    if (arrNamesForms.includes(formUpdate)) {
+      hl = allForms[formUpdate].historyList;
     }
-    if (this.props.stateForm.form === 'formExpenses') {
-      hl = this.props.stateForm.formExpenses.historyList;
-    }
+
     return (
       <div className="history">
-        {hl?.map((entry: Entry, index: number) =>
+        {hl.map((entry: Entry, index: number) =>
           entry.state === 'edit' ? (
             <EntryHistoryEdit
               date={entry.date}

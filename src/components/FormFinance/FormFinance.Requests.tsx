@@ -53,10 +53,12 @@ class Requests {
         if (nameFormSend === formName && data[formName] !== undefined) {
           console.log(`Приняты и обновлены данные: ${incomingMessage}`);
           compFormFinance.setState({
-            [formName]: {
-              historyList: data[formName],
+            allForms: {
+              [formName]: {
+                historyList: data[formName],
+              },
             },
-            form: formName,
+            formUpdate: formName,
           });
         }
 
