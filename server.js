@@ -227,15 +227,17 @@ function runStart(formName) {
     newFin = [];
 
   const getDataFile = getDataFromFile();
-  getDataFile[formName].forEach((item) => {
-    newFin.push({
-      date: item.date,
-      sum: item.sum,
-      name: item.name,
-      id: item.id,
-      state: 'main',
+  if (getDataFile[formName] !== undefined) {
+    getDataFile[formName].forEach((item) => {
+      newFin.push({
+        date: item.date,
+        sum: item.sum,
+        name: item.name,
+        id: item.id,
+        state: 'main',
+      });
     });
-  });
+  }
 
   newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
