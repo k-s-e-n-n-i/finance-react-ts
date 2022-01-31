@@ -72,7 +72,7 @@ class Requests {
       });
 
       promise.then(() => {
-        if (nameformMonth === formName) {
+        if (`${this.year}.${this.month}.${nameformMonth}` === formName) {
           this.checkFormsEntry(arrNamesFormsEntry);
         }
       });
@@ -103,7 +103,7 @@ class Requests {
       const postJSON = {
         editEntry: {
           id: form.getAttribute('id'),
-          formName: nameformMonth,
+          formName: `${this.year}.${this.month}.${nameformMonth}`,
         },
       };
       console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
@@ -175,7 +175,7 @@ class Requests {
           sum: form.sumEntry.value,
           name: form.nameEntry.value,
           state: 'main',
-          formName: nameformMonth,
+          formName: `${this.year}.${this.month}.${nameformMonth}`,
         },
       };
       console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
@@ -196,7 +196,7 @@ class Requests {
     const postJSON = {
       deleteEntry: {
         id: form.getAttribute('id'),
-        formName: nameformMonth,
+        formName: `${this.year}.${this.month}.${nameformMonth}`,
       },
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
