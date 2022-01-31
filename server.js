@@ -2,6 +2,10 @@ const WebSocketServer = new require('ws');
 const fs = require('fs');
 const clients = new Set();
 
+if (new Date().getDate() === 25) {
+  createListDates(new Date());
+}
+
 const webSocketServer = new WebSocketServer.Server({ port: 9001 });
 webSocketServer.on('connection', function (ws) {
   clients.add(ws);
@@ -272,4 +276,44 @@ function total(fileName) {
   }
 
   return sum;
+}
+
+//--------------------------------------------------------------
+
+function createListDates(startdate) {
+  const day = startdate.getDate();
+  const month = startdate.getMonth();
+  const year = startdate.getFullYear();
+
+  const monthStart = month + 1 < 10 ? `0${month + 1}` : month + 1;
+  const monthEnd = month + 2 < 10 ? `0${month + 2}` : month + 2;
+  const endDate = new Date(`${year}-${monthEnd}-${day}`);
+
+  const listDates = [];
+  let dayChange = day;
+  let nextDate = startdate;
+
+  while (nextDate != 'Invalid Date' && nextDate.valueOf() + 2 < endDate.valueOf()) {
+    const dFact = nextDate.getDate();
+    const d = dFact < 10 ? `0${dFact}` : dFact;
+    const mFact = nextDate.getMonth();
+    const m = mFact + 1 < 10 ? `0${mFact + 1}` : mFact + 1;
+    const y = nextDate.getFullYear();
+    listDates.push({
+      date: `${d}.${m}.${y}`,
+      sum: '',
+      name: '',
+      id: `${new Date().getTime()}${dayChange}`,
+      state: 'main',
+    });
+
+    dayChange++;
+    nextDate = new Date(year, month, dayChange, 23, 59, 59, 999);
+  }
+
+  let json = { [`${year}.${monthStart}.listDates`]: listDates };
+
+  fs.writeFileSync(`${year}.${monthStart}.listDates.json`, JSON.stringify(json));
+
+  return endDate;
 }
