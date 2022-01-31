@@ -2,8 +2,17 @@ const WebSocketServer = new require('ws');
 const fs = require('fs');
 const clients = new Set();
 
-if (new Date().getDate() === 25) {
-  createListDates(new Date());
+const today = new Date();
+const month = today.getMonth();
+const monthStr = month + 1 < 10 ? `0${month + 1}` : month + 1;
+const year = today.getFullYear();
+
+if (today.getDate() === 25) {
+  try {
+    fs.readFileSync(`${year}.${monthStr}.listDates.json`, 'utf8');
+  } catch (e) {
+    createListDates(today);
+  }
 }
 
 const webSocketServer = new WebSocketServer.Server({ port: 9001 });
