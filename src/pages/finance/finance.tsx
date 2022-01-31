@@ -1,6 +1,7 @@
 import React from 'react';
 import './finance.scss';
 import FormFinance from '../../components/FormFinance/FormFinance';
+import FormMonth from '../../components/FormMonth/FormMonth';
 
 class Finance extends React.Component<{}> {
   render() {
@@ -14,6 +15,9 @@ class Finance extends React.Component<{}> {
             </div>
             <div className="finance__form-finance">
               <FormFinance name="formExpenses" />
+            </div>
+            <div className="finance__form-finance">
+              <FormMonth />
             </div>
           </div>
         </div>
