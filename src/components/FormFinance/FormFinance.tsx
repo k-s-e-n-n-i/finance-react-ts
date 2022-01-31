@@ -66,7 +66,7 @@ class FormFinance extends React.Component<Props, State> {
             <InputText id={'ff_date'} name={'date'} inputText={todayDate} />
           </div>
           <div className="form-finance__item form-finance__item_input-sum">
-            <InputText id={'ff_sum'} name={'sumEntry'} placeholder={'1000'} />
+            <InputText id={'ff_sum'} name={'sumEntry'} placeholder={'1000'} type="number" />
           </div>
           <div className="form-finance__item">
             <InputText id={'ff_name'} name={'nameEntry'} placeholder={'наименование'} />
