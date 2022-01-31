@@ -79,7 +79,7 @@ class InputText extends React.Component<Props> {
             placeholder={placeholder}
             id={`inputText${id}`}
             defaultValue={inputText}
-            pattern="[0-9]*"
+            pattern={pattern}
             title="Только цифры"
           ></input>
         )}

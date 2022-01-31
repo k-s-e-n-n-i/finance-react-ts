@@ -37,7 +37,7 @@ class Requests {
   }
 
   getHistory() {
-    let { socket, arrNamesFormsEntry, formMonth, nameformMonth, compFormFinance } = this;
+    let { socket, arrNamesFormsEntry, nameformMonth, compFormFinance } = this;
 
     socket.onopen = () => {
       console.log('Соединение установлено.');
@@ -78,7 +78,7 @@ class Requests {
   }
 
   sendMessGetData() {
-    const { socket, nameformMonth } = this;
+    const { socket } = this;
     const postJSON = {
       getData: 'listDates',
     };

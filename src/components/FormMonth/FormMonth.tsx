@@ -4,7 +4,7 @@ import '../FormFinance/FormFinance.scss';
 import MonthTable from '../MonthTable/MonthTable';
 
 import { Requests } from './FormMonth.Requests';
-import { HistoryList, Entry } from '../../modules/interfaces';
+import { Entry } from '../../modules/interfaces';
 
 interface Props {
   caption: string;
@@ -15,8 +15,6 @@ interface Props {
 
 interface State {
   formUpdate: string;
-  allForms: { [key: string]: HistoryList };
-  arrNamesForms: string[];
   allSumForm: number;
 
   listDates: Entry[];
@@ -40,8 +38,7 @@ class FormFinance extends React.Component<Props, State> {
 
     this.state = {
       formUpdate: '',
-      allForms: {},
-      arrNamesForms: ['formFinance', 'formExpenses', 'formForm', 'newForm', 'finance'],
+
       allSumForm: 0,
 
       listDates: [],
@@ -50,7 +47,7 @@ class FormFinance extends React.Component<Props, State> {
 
   render() {
     let {
-      data: { caption, name },
+      data: { caption },
       refForm,
     } = this;
 
