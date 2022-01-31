@@ -2,7 +2,9 @@
   "env": {
     "es6": true
   },
-  "rules": {},
+  "rules": {
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+  },
   "plugins": ["prettier", "react"],
   "parserOptions": {
     "sourceType": "module"
