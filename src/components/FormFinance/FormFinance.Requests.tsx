@@ -20,7 +20,14 @@ class Requests {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
     }
 
-    const socket = new WebSocket('ws://localhost:9001');
+    let socketHost = 'ws://localhost:9001';
+
+    if (window.location.host === 'ksenni.ru') {
+      socketHost = 'ws://ksenni.ru:9001';
+    }
+
+    const socket = new WebSocket(socketHost);
+
     this.socket = socket;
   }
 
