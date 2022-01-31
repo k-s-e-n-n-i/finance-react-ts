@@ -277,7 +277,7 @@ function total(fileName) {
   try {
     getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
     getData[fileName].forEach((item) => {
-      sum = sum + parseFloat(item.sum);
+      sum = sum + parseFloat(item.sum | 0);
     });
   } catch (e) {
     fs.writeFileSync(`${fileName}.json`, JSON.stringify({}));
