@@ -5,6 +5,9 @@ class Requests {
   nameformMonth: string | null | undefined = '';
   compFormFinance: React.Component;
   socket: WebSocket;
+  year: number;
+  m: number;
+  month: string;
 
   /**
    *
@@ -14,6 +17,9 @@ class Requests {
   constructor(compFormFinance: React.Component, form: HTMLElement) {
     this.formGeneral = form;
     this.compFormFinance = compFormFinance;
+    this.year = new Date().getFullYear();
+    this.m = new Date().getMonth();
+    this.month = this.m + 1 < 10 ? `0${this.m + 1}` : `${this.m + 1}`;
     this.init();
 
     if (!window.WebSocket) {
@@ -53,7 +59,7 @@ class Requests {
       const formName = data.form;
 
       const promise = new Promise((resolve) => {
-        if (nameformMonth === formName && data[formName] !== undefined) {
+        if (`${this.year}.${this.month}.${nameformMonth}` === formName && data[formName] !== undefined) {
           console.log(`Приняты и обновлены данные (таблица месяца): ${incomingMessage}`);
           compFormFinance.setState({
             listDates: data[formName],
@@ -80,7 +86,7 @@ class Requests {
   sendMessGetData() {
     const { socket } = this;
     const postJSON = {
-      getData: 'listDates',
+      getData: `${this.year}.${this.month}.listDates`,
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
