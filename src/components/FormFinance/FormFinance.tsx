@@ -55,7 +55,6 @@ class FormFinance extends React.Component<Props, State> {
     const today = new Date();
     const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
     const todayDate = `${today.getDate()}.${month}.${today.getFullYear()}`;
-    console.log(today);
 
     return (
       <div className="form-finance" ref={refForm}>
