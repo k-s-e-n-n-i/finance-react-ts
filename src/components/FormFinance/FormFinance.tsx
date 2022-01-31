@@ -52,13 +52,18 @@ class FormFinance extends React.Component<Props, State> {
       refForm,
     } = this;
 
+    const today = new Date();
+    const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
+    const todayDate = `${today.getDate()}.${month}.${today.getFullYear()}`;
+    console.log(today);
+
     return (
       <div className="form-finance" ref={refForm}>
         <h1 className="form-finance__topic">{caption}</h1>
 
         <form className="form-finance__ff-send" name={name}>
           <div className="form-finance__item form-finance__item_input-date">
-            <InputText id={'ff_date'} name={'date'} />
+            <InputText id={'ff_date'} name={'date'} inputText={todayDate} />
           </div>
           <div className="form-finance__item form-finance__item_input-sum">
             <InputText id={'ff_sum'} name={'sumEntry'} placeholder={'1000'} />
