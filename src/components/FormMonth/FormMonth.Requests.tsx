@@ -150,17 +150,8 @@ class Requests {
    * @param form - форма конкретной записи в списке истории ('.entry-history')
    */
   checkEditForm(form: HTMLFormElement) {
-    form.onsubmit = (e) => {
-      console.log('saved', form);
-
-      const nameButtonClick = e.submitter?.getAttribute('name');
-      if (nameButtonClick === 'save') {
-        this.sendSaveEntry(form);
-      }
-      if (nameButtonClick === 'delete') {
-        this.sendDeleteEntry(form);
-      }
-
+    form.onsubmit = () => {
+      this.sendSaveEntry(form);
       return false;
     };
   }
@@ -185,7 +176,7 @@ class Requests {
         saveEntry: {
           id: form.getAttribute('id'),
           date: form.querySelector('.entry-history__item_date')?.innerHTML,
-          sumStr: form.sumEntry.value,
+          sumStr: sumStr,
           sum: sum,
           name: form.nameEntry.value,
           state: 'main',
@@ -203,18 +194,6 @@ class Requests {
         notification.innerHTML = 'Поля заполнены некорректно';
       }
     }
-  }
-
-  sendDeleteEntry(form: HTMLFormElement) {
-    const { socket, nameformMonth } = this;
-    const postJSON = {
-      deleteEntry: {
-        id: form.getAttribute('id'),
-        formName: `${this.year}.${this.month}.${nameformMonth}`,
-      },
-    };
-    console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
-    socket.send(JSON.stringify(postJSON));
   }
 }
 

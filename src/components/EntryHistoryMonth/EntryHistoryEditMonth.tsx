@@ -40,10 +40,7 @@ export class EntryHistoryEditMonth extends React.Component<Props> {
         <div className="entry-history__item-edit">
           <InputText id={'ff_name'} name={'nameEntry'} inputText={name} placeholder={'наименование'} />
         </div>
-        <div className="entry-history__item-edit entry-history__item-edit_buttons ">
-          <ButtonSubmit text={'сохр.'} border={false} name="save" />
-          <ButtonSubmit text={'X'} name="delete" />
-        </div>
+        <ButtonSubmit text={'сохр.'} border={false} name="save" />
         <div className="entry-history__item-edit entry-history__item-edit_1-5">
           <p className="form-finance__notification"></p>
         </div>
