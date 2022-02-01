@@ -7,6 +7,7 @@ import InputText from '../InputText/InputText';
 type Props = {
   date: string;
   sum: string;
+  sumStr: string;
   name: string;
   idItem: number;
   state: string;
@@ -28,7 +29,7 @@ export class EntryHistoryEdit extends React.Component<Props> {
 
   render() {
     const {
-      data: { date, idItem, sum, name },
+      data: { date, idItem, sumStr, name },
     } = this;
     return (
       <form className="entry-history entry-history_edit" name={`entry${idItem}`} id={`${idItem}`}>
@@ -36,7 +37,7 @@ export class EntryHistoryEdit extends React.Component<Props> {
           <InputText id={'ff_date'} name={'date'} inputText={date} />
         </div>
         <div className="entry-history__item-edit entry-history__item_input-sum">
-          <InputText id={'ff_sum'} name={'sumEntry'} inputText={sum} placeholder={'1000'} type="count" />
+          <InputText id={'ff_sum'} name={'sumEntry'} inputText={sumStr} placeholder={'1000'} type="count" />
         </div>
         <div className="entry-history__item-edit">
           <InputText id={'ff_name'} name={'nameEntry'} inputText={name} placeholder={'наименование'} />

@@ -162,7 +162,14 @@ function updateEntrys(idEntry, objData, typeRequest) {
 
         return;
       } else {
-        newFin.push({ date: item.date, sum: item.sum, name: item.name, id: item.id, state: item.state });
+        newFin.push({
+          date: item.date,
+          sumStr: item.sumStr,
+          sum: item.sum,
+          name: item.name,
+          id: item.id,
+          state: item.state,
+        });
       }
     });
   }
@@ -256,6 +263,7 @@ function runStart(formName) {
     getDataFile[formName].forEach((item) => {
       newFin.push({
         date: item.date,
+        sumStr: item.sumStr,
         sum: item.sum,
         name: item.name,
         id: item.id,
@@ -279,7 +287,7 @@ function total(fileName) {
   try {
     getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
     getData[fileName].forEach((item) => {
-      sum = sum + parseFloat(item.sum | 0);
+      item.sum != '' ? (sum = sum + parseFloat(item.sum)) : (sum = sum + 0);
     });
   } catch (e) {
     fs.writeFileSync(`${fileName}.json`, JSON.stringify({}));
@@ -312,7 +320,8 @@ function createListDates(startdate) {
     const y = nextDate.getFullYear();
     listDates.push({
       date: `${d}.${m}.${y}`,
-      sum: '',
+      sumStr: '',
+      sum: 0,
       name: '',
       id: `${new Date().getTime()}${dayChange}`,
       state: 'main',

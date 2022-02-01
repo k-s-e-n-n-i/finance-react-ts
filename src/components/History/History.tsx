@@ -47,6 +47,7 @@ class History extends React.Component<Props> {
           entry.state === 'edit' ? (
             <EntryHistoryEdit
               date={entry.date}
+              sumStr={entry.sumStr}
               sum={entry.sum}
               name={entry.name}
               idItem={entry.id}
