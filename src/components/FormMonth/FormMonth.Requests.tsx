@@ -8,6 +8,7 @@ class Requests {
   year: number;
   m: number;
   month: string;
+  day: number;
 
   /**
    *
@@ -19,7 +20,11 @@ class Requests {
     this.compFormFinance = compFormFinance;
     this.year = new Date().getFullYear();
     this.m = new Date().getMonth();
-    this.month = this.m + 1 < 10 ? `0${this.m + 1}` : `${this.m + 1}`;
+    this.day = new Date().getDate();
+    this.day < 25
+      ? (this.month = this.m < 10 ? `0${this.m}` : `${this.m}`)
+      : (this.month = this.m + 1 < 10 ? `0${this.m + 1}` : `${this.m + 1}`);
+
     this.init();
 
     if (!window.WebSocket) {
@@ -84,9 +89,9 @@ class Requests {
   }
 
   sendMessGetData() {
-    const { socket } = this;
+    const { socket, year, month } = this;
     const postJSON = {
-      getData: `${this.year}.${this.month}.listDates`,
+      getData: `${year}.${month}.listDates`,
     };
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
