@@ -12,7 +12,7 @@ class Finance extends React.Component<{}> {
           <div className="finance__forms">
             {/* При добавлении новой формы нужно указать name и прописать его в this.state.arrNamesForms FormFinance.tsx */}
             <div className="finance__form-finance">
-              <FormFinance name="formFinance" />
+              <FormFinance name="formFinance" colorForm="pink" />
             </div>
             <div className="finance__form-finance">
               <FormFinance name="formAccumulation" />
@@ -23,10 +23,10 @@ class Finance extends React.Component<{}> {
             </div>
 
             <div className="finance__form-finance">
-              <FormFinance name="formExpenses" />
+              <FormFinance name="formExpenses" colorForm="blue" />
             </div>
             <div className="finance__form-finance finance__form-finance_1-3-col">
-              <FormMonth />
+              <FormMonth colorForm="blue" />
             </div>
           </div>
         </div>

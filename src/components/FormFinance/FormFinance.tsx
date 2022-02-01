@@ -13,6 +13,7 @@ interface Props {
   name: string;
   type: string;
   classBlock: string;
+  colorForm: string;
 }
 
 interface State {
@@ -28,6 +29,7 @@ class FormFinance extends React.Component<Props, State> {
     name: '',
     type: '',
     classBlock: '',
+    colorForm: '',
   };
 
   data: Props;
@@ -48,16 +50,18 @@ class FormFinance extends React.Component<Props, State> {
 
   render() {
     let {
-      data: { caption, name },
+      data: { caption, name, colorForm },
       refForm,
     } = this;
+
+    colorForm = `form-finance_${colorForm}`;
 
     const today = new Date();
     const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
     const todayDate = `${today.getDate()}.${month}.${today.getFullYear()}`;
 
     return (
-      <div className="form-finance" ref={refForm}>
+      <div className={`form-finance ${colorForm}`} ref={refForm}>
         <h1 className="form-finance__topic">{caption}</h1>
 
         <form className="form-finance__ff-send" name={name}>

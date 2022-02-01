@@ -11,6 +11,7 @@ interface Props {
   name: string;
   type: string;
   classBlock: string;
+  colorForm: string;
 }
 
 interface State {
@@ -26,6 +27,7 @@ class FormFinance extends React.Component<Props, State> {
     name: '',
     type: '',
     classBlock: '',
+    colorForm: '',
   };
 
   data: Props;
@@ -47,12 +49,14 @@ class FormFinance extends React.Component<Props, State> {
 
   render() {
     let {
-      data: { caption },
+      data: { caption, colorForm },
       refForm,
     } = this;
 
+    colorForm = `form-finance_${colorForm}`;
+
     return (
-      <div className="form-finance month-table" data-name="listDates" ref={refForm}>
+      <div className={`form-finance ${colorForm}`} data-name="listDates" ref={refForm}>
         <h1 className="form-finance__topic">{caption}</h1>
 
         <MonthTable stateForm={this.state} />
