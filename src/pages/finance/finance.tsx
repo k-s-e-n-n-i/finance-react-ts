@@ -1,7 +1,7 @@
 import React from 'react';
 import './finance.scss';
-import FormFinance from '../../components/FormFinance/FormFinance';
-import FormMonth from '../../components/FormMonth/FormMonth';
+import FormFinance from '../../components/forms/FormFinance';
+import FormMonth from '../../components/forms/FormMonth';
 import FormTotal from '../../components/FormTotal/FormTotal';
 
 class Finance extends React.Component<{}> {

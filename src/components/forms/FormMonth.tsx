@@ -1,9 +1,9 @@
 import React from 'react';
-import '../FormFinance/FormFinance.scss';
+import './FormFinance.scss';
 
 import MonthTable from '../MonthTable/MonthTable';
 
-import { Requests } from './FormMonth.Requests';
+import { Requests } from './FormFinance.Requests';
 import { Entry } from '../../modules/interfaces';
 
 interface Props {

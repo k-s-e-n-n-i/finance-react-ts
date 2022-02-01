@@ -1,3 +1,10 @@
+interface dataUpdateFormMonth {
+  formName: string;
+  data: any;
+  incomingMessage: string;
+  compFormFinance: React.Component;
+}
+
 class Requests {
   arrNamesFormsEntry: string[] = [];
   formGeneral: HTMLElement;
@@ -5,6 +12,12 @@ class Requests {
   nameFormSend: string | null | undefined = '';
   compFormFinance: React.Component;
   socket: WebSocket;
+
+  nameformMonth: string | null | undefined = '';
+  year: number;
+  m: number;
+  month: string;
+  day: number;
 
   /**
    *
@@ -14,7 +27,15 @@ class Requests {
   constructor(compFormFinance: React.Component, form: HTMLElement) {
     this.formGeneral = form;
     this.compFormFinance = compFormFinance;
-    this.init();
+    this.initFormFinance();
+
+    this.year = new Date().getFullYear();
+    this.m = new Date().getMonth();
+    this.day = new Date().getDate();
+    this.day < 25
+      ? (this.month = this.m < 10 ? `0${this.m}` : `${this.m}`)
+      : (this.month = this.m + 1 < 10 ? `0${this.m + 1}` : `${this.m + 1}`);
+    this.initFormMonth();
 
     if (!window.WebSocket) {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
@@ -31,24 +52,25 @@ class Requests {
     this.socket = socket;
   }
 
-  init() {
+  initFormFinance() {
     this.formSend = this.formGeneral.querySelector('.form-finance__ff-send');
     this.nameFormSend = this.formSend?.getAttribute('name');
   }
 
-  getHistory() {
-    let { socket, arrNamesFormsEntry, formSend, nameFormSend, compFormFinance } = this;
+  initFormMonth() {
+    this.nameformMonth = this.formGeneral.getAttribute('data-name');
+  }
 
-    if (formSend && nameFormSend) {
+  getHistory() {
+    let { compFormFinance, socket, formSend, nameformMonth, year, month } = this;
+
+    if (formSend) {
       this.sendMessAddFinance(formSend);
     }
 
     socket.onopen = () => {
       console.log('Соединение установлено.');
-
-      if (nameFormSend) {
-        this.sendMessGetData();
-      }
+      this.sendMessGetData();
     };
 
     socket.onmessage = (event) => {
@@ -56,28 +78,21 @@ class Requests {
       const data = JSON.parse(incomingMessage);
       const formName = data.form;
 
-      const promise = new Promise((resolve) => {
-        if (nameFormSend === formName && data[formName] !== undefined) {
-          console.log(`Приняты и обновлены данные: ${incomingMessage}`);
-          compFormFinance.setState({
-            allForms: {
-              [formName]: {
-                historyList: data[formName],
-              },
-            },
-            formUpdate: formName,
-            allSumForm: data.allSum,
-          });
-        }
-
-        resolve(true);
-      });
-
-      promise.then(() => {
-        if (nameFormSend === formName) {
-          this.checkFormsEntry(arrNamesFormsEntry);
-        }
-      });
+      if (formName == `${year}.${month}.${nameformMonth}`) {
+        this.runUpdateFormMonth({
+          formName: formName,
+          data: data,
+          incomingMessage: incomingMessage,
+          compFormFinance: compFormFinance,
+        });
+      } else {
+        this.runUpdateFormFinance({
+          formName: formName,
+          data: data,
+          incomingMessage: incomingMessage,
+          compFormFinance: compFormFinance,
+        });
+      }
     };
 
     socket.onerror = (error: Event) => {
@@ -85,6 +100,56 @@ class Requests {
     };
   }
 
+  runUpdateFormFinance(obj: dataUpdateFormMonth) {
+    const { nameFormSend } = this;
+    const { formName, data, incomingMessage, compFormFinance } = obj;
+
+    const promise = new Promise((resolve) => {
+      if (nameFormSend === formName && data[formName] !== undefined) {
+        console.log(`Приняты и обновлены данные: ${incomingMessage}`);
+        compFormFinance.setState({
+          allForms: {
+            [formName]: {
+              historyList: data[formName],
+            },
+          },
+          formUpdate: formName,
+          allSumForm: data.allSum,
+        });
+      }
+
+      resolve(true);
+    });
+
+    promise.then(() => {
+      if (nameFormSend === formName) {
+        this.checkFormsEntry();
+      }
+    });
+  }
+  runUpdateFormMonth(obj: dataUpdateFormMonth) {
+    const { nameformMonth } = this;
+    const { formName, data, incomingMessage, compFormFinance } = obj;
+
+    const promise = new Promise((resolve) => {
+      if (`${this.year}.${this.month}.${nameformMonth}` === formName && data[formName] !== undefined) {
+        console.log(`Приняты и обновлены данные (таблица месяца): ${incomingMessage}`);
+        compFormFinance.setState({
+          listDates: data[formName],
+          formUpdate: formName,
+          allSumForm: data.allSum,
+        });
+      }
+
+      resolve(true);
+    });
+
+    promise.then(() => {
+      if (`${this.year}.${this.month}.${nameformMonth}` === formName) {
+        this.checkFormsEntry();
+      }
+    });
+  }
   /**
    *
    * @param form - форма добавления новой записи ('.form-finance__ff-send')
@@ -122,10 +187,18 @@ class Requests {
   }
 
   sendMessGetData() {
-    const { socket, nameFormSend } = this;
-    const postJSON = {
-      getData: nameFormSend,
-    };
+    const { socket, nameFormSend, nameformMonth, year, month } = this;
+    let postJSON = {};
+
+    if (nameformMonth) {
+      postJSON = {
+        getData: `${year}.${month}.listDates`,
+      };
+    } else {
+      postJSON = {
+        getData: nameFormSend,
+      };
+    }
     console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
     socket.send(JSON.stringify(postJSON));
   }
@@ -135,13 +208,19 @@ class Requests {
    * @param form - форма конкретной записи в списке истории ('.entry-history')
    */
   sendEditEntry(form: HTMLFormElement) {
-    const { socket, nameFormSend } = this;
+    const { socket, nameFormSend, nameformMonth } = this;
+    let formName;
+
     form.onsubmit = () => {
-      console.log('edit', form);
+      if (nameformMonth) {
+        formName = `${this.year}.${this.month}.${nameformMonth}`;
+      } else {
+        formName = nameFormSend;
+      }
       const postJSON = {
         editEntry: {
           id: form.getAttribute('id'),
-          formName: nameFormSend,
+          formName: formName,
         },
       };
       console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
@@ -154,8 +233,9 @@ class Requests {
    *
    * @param arrNamesFormsEntry - массив имен (name) форм записей ('.entry-history') в списке истории
    */
-  checkFormsEntry(arrNamesFormsEntry: string[]) {
+  checkFormsEntry() {
     const { formGeneral } = this;
+    let { arrNamesFormsEntry } = this;
     const mas = formGeneral.querySelectorAll('form.entry-history');
     arrNamesFormsEntry = [];
 
@@ -203,7 +283,7 @@ class Requests {
    * @param form - форма конкретной записи в списке истории ('.entry-history')
    */
   sendSaveEntry(form: HTMLFormElement) {
-    const { socket, nameFormSend } = this;
+    const { socket, nameFormSend, nameformMonth } = this;
     const notification = form.querySelector('.form-finance__notification');
 
     const sumStr = form.sumEntry.value;
@@ -212,29 +292,46 @@ class Requests {
     arrSum.forEach((item: string) => {
       sum = sum + parseFloat(item);
     });
+    let postJSON = {};
 
-    if (form.date.value !== '' && form.sumEntry.value !== '') {
-      const postJSON = {
+    if (nameformMonth && form.sumEntry.value !== '') {
+      postJSON = {
         saveEntry: {
           id: form.getAttribute('id'),
-          date: form.date.value,
+          date: form.querySelector('.entry-history__item_date')?.innerHTML,
           sumStr: sumStr,
           sum: sum,
           name: form.nameEntry.value,
           state: 'main',
-          formName: nameFormSend,
+          formName: `${this.year}.${this.month}.${nameformMonth}`,
         },
       };
-      console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
-      socket.send(JSON.stringify(postJSON));
-
-      if (notification) {
-        notification.innerHTML = '';
-      }
     } else {
-      if (notification) {
-        notification.innerHTML = 'Поля заполнены некорректно';
+      if (form.date.value !== '' && form.sumEntry.value !== '') {
+        postJSON = {
+          saveEntry: {
+            id: form.getAttribute('id'),
+            date: form.date.value,
+            sumStr: sumStr,
+            sum: sum,
+            name: form.nameEntry.value,
+            state: 'main',
+            formName: nameFormSend,
+          },
+        };
+      } else {
+        if (notification) {
+          notification.innerHTML = 'Поля заполнены некорректно';
+        }
+        return;
       }
+    }
+
+    console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
+    socket.send(JSON.stringify(postJSON));
+
+    if (notification) {
+      notification.innerHTML = '';
     }
   }
 
