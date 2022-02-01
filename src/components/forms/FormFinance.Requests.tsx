@@ -167,12 +167,15 @@ class Requests {
     const { socket, nameFormSend } = this;
 
     form.onsubmit = () => {
+      const { sumStr, sum } = this.getSum(form);
+
       const notification = form.querySelector('.form-finance__notification');
       if (form.date.value !== '' && form.sumEntry.value !== '') {
         const postJSON = {
           addFinance: {
             date: form.date.value,
-            sum: form.sumEntry.value,
+            sumStr: sumStr,
+            sum: sum,
             name: form.nameEntry.value,
             state: 'main',
             id: new Date().getTime(),
@@ -295,12 +298,8 @@ class Requests {
     const { socket, nameFormSend, nameformMonth } = this;
     const notification = form.querySelector('.form-finance__notification');
 
-    const sumStr = form.sumEntry.value;
-    const arrSum = sumStr.split('+');
-    let sum: number = 0;
-    arrSum.forEach((item: string) => {
-      sum = sum + parseFloat(item);
-    });
+    const { sumStr, sum } = this.getSum(form);
+
     let postJSON = {};
 
     if (nameformMonth && form.sumEntry.value !== '') {
@@ -342,6 +341,17 @@ class Requests {
     if (notification) {
       notification.innerHTML = '';
     }
+  }
+
+  getSum(form: HTMLFormElement) {
+    const sumStr = form.sumEntry.value;
+    const arrSum = sumStr.split('+');
+    let sum: number = 0;
+    arrSum.forEach((item: string) => {
+      sum = sum + parseFloat(item);
+    });
+
+    return { sumStr: sumStr, sum: sum };
   }
 
   /**
