@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { EntryHistoryMainMonth } from '../EntryHistoryMonth/EntryHistoryMainMonth';
-import { EntryHistoryEditMonth } from '../EntryHistoryMonth/EntryHistoryEditMonth';
+import { EntryHistoryMainMonth } from '../EntryHistory/EntryHistoryMainMonth';
+import { EntryHistoryEditMonth } from '../EntryHistory/EntryHistoryEditMonth';
 
 import { Entry } from '../../modules/interfaces';
 
