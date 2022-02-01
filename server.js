@@ -25,6 +25,8 @@ webSocketServer.on('connection', function (ws) {
 
     const messageToString = JSON.parse(message);
 
+    checkFormTotal();
+
     checkGetData(messageToString);
     checkAddFinance(messageToString);
     checkEditEntry(messageToString);
@@ -181,6 +183,8 @@ function updateEntrys(idEntry, objData, typeRequest) {
   console.log(`\n Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest}) \n`);
 
   sortData(formName);
+  checkFormTotal();
+
   const allSum = total(formName);
 
   const sendJSON = JSON.stringify({
@@ -212,6 +216,7 @@ function writeData(postJSON, formName) {
 
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
   sortData(formName);
+  checkFormTotal();
 
   const json = getDataFromFile(formName);
   console.log('\n Перезаписан data.json:\n');
@@ -336,4 +341,29 @@ function createListDates(startdate) {
   fs.writeFileSync(`${year}.${monthStart}.listDates.json`, JSON.stringify(json));
 
   return endDate;
+}
+
+function checkFormTotal() {
+  let fileName = 'formTotal';
+
+  const sumFin = total('formFinance');
+  const expMain = total('formExpenses');
+  console.log(`${year}.${monthStr}.listDates`);
+  const expMonth = total(`${year}.${monthStr}.listDates`);
+  const sumEx = expMain + expMonth;
+
+  const json = {
+    form: fileName,
+    [fileName]: {
+      finance: sumFin,
+      expMain: expMain,
+      expMonth: expMonth,
+      expenses: sumEx,
+      balance: (sumFin - sumEx).toFixed(2),
+    },
+  };
+
+  for (const client of clients) {
+    client.send(JSON.stringify(json));
+  }
 }
