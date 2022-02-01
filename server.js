@@ -3,8 +3,11 @@ const fs = require('fs');
 const clients = new Set();
 
 const today = new Date();
+const day = today.getDate();
 const month = today.getMonth();
-const monthStr = month + 1 < 10 ? `0${month + 1}` : month + 1;
+day < 25
+  ? (monthStr = month < 10 ? `0${month}` : `${month}`)
+  : (monthStr = month + 1 < 10 ? `0${month + 1}` : month + 1);
 const year = today.getFullYear();
 
 if (today.getDate() === 25) {
@@ -137,8 +140,6 @@ function updateEntrys(idEntry, objData, typeRequest) {
   if (getDataFile[formName] != undefined) {
     getDataFile[formName].forEach((item) => {
       if (parseInt(item.id) === idEntry) {
-        console.log(`Я нашел запись c id ${idEntry}`);
-
         if (typeRequest === 'save') {
           newFin.push({
             date: objData.date,
