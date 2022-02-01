@@ -72,7 +72,7 @@ class FormTotal extends React.Component<Props, State> {
   componentDidMount() {
     const form = this.refForm.current;
     if (form) {
-      const socket = new Requests(this, form);
+      const socket = new Requests(this);
       socket.getHistory();
     }
   }

@@ -8,7 +8,7 @@ class Requests {
    * @param compFormTotal - this у компонента FormTotal
    * @param form - родительский блок всего компонента FormTotal ('.form-finance')
    */
-  constructor(compFormTotal: React.Component, form: HTMLElement) {
+  constructor(compFormTotal: React.Component) {
     this.compFormTotal = compFormTotal;
     this.nameFormTotal = 'formTotal';
 
@@ -39,7 +39,7 @@ class Requests {
       const data = JSON.parse(incomingMessage);
       const formName = data.form;
 
-      const promise = new Promise((resolve) => {
+      new Promise((resolve) => {
         if (nameFormTotal === formName && data[formName] !== undefined) {
           console.log(`Приняты и обновлены данные: ${incomingMessage}`);
           compFormTotal.setState({
