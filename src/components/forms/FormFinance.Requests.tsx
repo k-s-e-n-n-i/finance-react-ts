@@ -100,6 +100,10 @@ class Requests {
     };
   }
 
+  /**
+   *
+   * @param obj - объект с даннымими необходимыми для выполнения дальнейших действий
+   */
   runUpdateFormFinance(obj: dataUpdateFormMonth) {
     const { nameFormSend } = this;
     const { formName, data, incomingMessage, compFormFinance } = obj;
@@ -127,6 +131,10 @@ class Requests {
       }
     });
   }
+  /**
+   *
+   * @param obj - объект с даннымими необходимыми для выполнения дальнейших действий
+   */
   runUpdateFormMonth(obj: dataUpdateFormMonth) {
     const { nameformMonth } = this;
     const { formName, data, incomingMessage, compFormFinance } = obj;
@@ -150,6 +158,7 @@ class Requests {
       }
     });
   }
+
   /**
    *
    * @param form - форма добавления новой записи ('.form-finance__ff-send')
@@ -335,6 +344,10 @@ class Requests {
     }
   }
 
+  /**
+   *
+   * @param form form - форма конкретной записи в списке истории ('.entry-history')
+   */
   sendDeleteEntry(form: HTMLFormElement) {
     const { socket, nameFormSend } = this;
     const postJSON = {
