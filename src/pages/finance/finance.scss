@@ -33,12 +33,8 @@
     margin: 20px;
   }
 
-  &__form-finance_1-3 {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-  &__form-finance_1-3-col {
-    grid-row-start: 2;
+  &__form-finance_right {
+    grid-row-start: 1;
     grid-row-end: 6;
     grid-column-start: 2;
     grid-column-end: 3;
