@@ -242,13 +242,12 @@ function sortData(formName) {
 
   if (fin !== undefined) {
     fin.sort((a, b) => {
-      if (a.date > b.date) {
-        return 1;
-      }
-      if (a.date < b.date) {
-        return -1;
-      }
-      return 0;
+      const arrA = a.date.split('.');
+      const arrB = b.date.split('.');
+      const dateA = `${arrA[2]}-${arrA[1]}-${arrA[0]}`;
+      const dateB = `${arrB[2]}-${arrB[1]}-${arrB[0]}`;
+      // console.log('sort', dateA, dateB);
+      return new Date(dateA) - new Date(dateB);
     });
   }
 
