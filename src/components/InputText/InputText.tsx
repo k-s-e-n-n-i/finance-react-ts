@@ -52,8 +52,8 @@ class InputText extends React.Component<Props> {
     placeholder = name === 'date' ? 'ДД.ММ.ГГГГ' : placeholder;
 
     if (type == 'count') {
-      pattern = '[0-9+]*';
-      title = 'Только цифры и знак +';
+      pattern = '[0-9+.]*';
+      title = 'Только цифры и знаки: + .';
     }
 
     return (
