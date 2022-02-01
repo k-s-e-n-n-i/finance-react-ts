@@ -140,6 +140,7 @@ function updateEntrys(idEntry, objData, typeRequest) {
         if (typeRequest === 'save') {
           newFin.push({
             date: objData.date,
+            sumStr: objData.sumStr,
             sum: objData.sum,
             name: objData.name,
             id: item.id,
@@ -149,6 +150,7 @@ function updateEntrys(idEntry, objData, typeRequest) {
         if (typeRequest === 'edit') {
           newFin.push({
             date: item.date,
+            sumStr: item.sumStr,
             sum: item.sum,
             name: item.name,
             id: item.id,

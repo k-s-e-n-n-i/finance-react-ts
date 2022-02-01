@@ -1,5 +1,6 @@
 export interface Entry {
   date: string;
+  sumStr: string;
   sum: string;
   name: string;
   id: number;

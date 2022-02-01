@@ -172,12 +172,21 @@ class Requests {
   sendSaveEntry(form: HTMLFormElement) {
     const { socket, nameformMonth } = this;
     const notification = form.querySelector('.form-finance__notification');
+
+    const sumStr = form.sumEntry.value;
+    const arrSum = sumStr.split('+');
+    let sum: number = 0;
+    arrSum.forEach((item: string) => {
+      sum = sum + parseFloat(item);
+    });
+
     if (form.sumEntry.value !== '') {
       const postJSON = {
         saveEntry: {
           id: form.getAttribute('id'),
           date: form.querySelector('.entry-history__item_date')?.innerHTML,
-          sum: form.sumEntry.value,
+          sumStr: form.sumEntry.value,
+          sum: sum,
           name: form.nameEntry.value,
           state: 'main',
           formName: `${this.year}.${this.month}.${nameformMonth}`,

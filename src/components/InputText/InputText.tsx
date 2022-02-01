@@ -13,7 +13,6 @@ type Props = {
   state: string;
   type: string;
   name: string;
-  pattern: string;
 };
 
 class InputText extends React.Component<Props> {
@@ -25,7 +24,6 @@ class InputText extends React.Component<Props> {
     state: '',
     type: '',
     name: '',
-    pattern: '',
   };
 
   data: Props;
@@ -47,12 +45,16 @@ class InputText extends React.Component<Props> {
 
   render() {
     let {
-      data: { id, topic, label, placeholder, inputText, state, type, name, pattern },
+      data: { id, topic, label, placeholder, inputText, state, type, name },
     } = this;
+    let pattern, title;
 
     placeholder = name === 'date' ? 'ДД.ММ.ГГГГ' : placeholder;
 
-    pattern = type = 'number' ? '[0-9]*' : '';
+    if (type == 'count') {
+      pattern = '[0-9+]*';
+      title = 'Только цифры и знак +';
+    }
 
     return (
       <div className={`input-text ${this.checkSubscription(type)}`}>
@@ -80,7 +82,7 @@ class InputText extends React.Component<Props> {
             id={`inputText${id}`}
             defaultValue={inputText}
             pattern={pattern}
-            title="Только цифры"
+            title={title}
           ></input>
         )}
       </div>

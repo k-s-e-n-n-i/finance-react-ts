@@ -36,7 +36,7 @@ export class EntryHistoryEdit extends React.Component<Props> {
           <InputText id={'ff_date'} name={'date'} inputText={date} />
         </div>
         <div className="entry-history__item-edit entry-history__item_input-sum">
-          <InputText id={'ff_sum'} name={'sumEntry'} inputText={sum} placeholder={'1000'} />
+          <InputText id={'ff_sum'} name={'sumEntry'} inputText={sum} placeholder={'1000'} type="count" />
         </div>
         <div className="entry-history__item-edit">
           <InputText id={'ff_name'} name={'nameEntry'} inputText={name} placeholder={'наименование'} />
