@@ -24,7 +24,7 @@ webSocketServer.on('connection', function (ws) {
   console.log(`Новое соединение ${clients}`);
 
   ws.on('message', function (message) {
-    console.log(`Получено сообщение: ${message}`);
+    console.log(`\nПолучено сообщение: ${message}`);
 
     const messageToString = JSON.parse(message);
 
@@ -181,7 +181,7 @@ function updateEntrys(idEntry, objData, typeRequest) {
 
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
   const json = getDataFromFile(formName);
-  console.log(`\n Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest}) \n`);
+  console.log(`Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest})`);
 
   sortData(formName);
   checkFormTotal();
@@ -220,7 +220,7 @@ function writeData(postJSON, formName) {
   checkFormTotal();
 
   const json = getDataFromFile(formName);
-  console.log('\n Перезаписан data.json:\n');
+  console.log('Перезаписан data.json:');
   return json;
 }
 
@@ -281,7 +281,7 @@ function runStart(formName) {
 
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
 
-  console.log(`\n Перезаписан data.json: изменено состояние на main \n`);
+  console.log(`Перезаписан data.json: изменено состояние на main`);
 }
 
 //--------------------------------------------------------------
