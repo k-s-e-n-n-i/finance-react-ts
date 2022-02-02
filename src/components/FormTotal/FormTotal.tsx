@@ -2,6 +2,7 @@ import React from 'react';
 import './FormTotal.scss';
 
 import { Requests } from './FormTotal.Requests';
+import FormFinance from '../forms/FormFinance';
 
 interface Props {
   caption: string;
@@ -69,6 +70,11 @@ class FormTotal extends React.Component<Props, State> {
       <div className="form-total" ref={refForm}>
         <h1 className="form-total__topic">{caption}</h1>
 
+        <div className="form-total__total">Сумма на начало периода: {this.state.startBalance}</div>
+        <div className="form-total__total">Текущее: {this.state.balance}</div>
+
+        <hr className="form-total__hr-line "></hr>
+
         <p className="form-total__item">
           Поступление: <span className="form-total__item-count">{this.state.finance}</span>
         </p>
@@ -77,14 +83,6 @@ class FormTotal extends React.Component<Props, State> {
           <span className="form-total__item-count"> {this.state.expMonth} </span>=
           <span className="form-total__item-count"> {this.state.expenses} </span>
         </p>
-
-        <hr className="form-total__hr-line "></hr>
-
-        <div className="form-total__total">Сумма на начало периода: {this.state.startBalance}</div>
-
-        <hr className="form-total__hr-line "></hr>
-
-        <div className="form-total__total">Текущее: {this.state.balance}</div>
 
         <hr className="form-total__hr-line "></hr>
 
@@ -116,6 +114,12 @@ class FormTotal extends React.Component<Props, State> {
           <p className="form-total__item-caption">Осталось:</p>
           <p className="form-total__item-count"> {this.state.mediumInDayWill} </p>
           <p></p>
+        </div>
+
+        <hr className="form-total__hr-line "></hr>
+
+        <div className="form-total__item">
+          <FormFinance name="formCheck" caption="Проверить" />
         </div>
       </div>
     );
