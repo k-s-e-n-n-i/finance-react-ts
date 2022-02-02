@@ -349,10 +349,13 @@ function checkFormTotal() {
   const expMain = total('formExpenses');
   const expMonth = total(fileNameFormMonth);
   const sumEx = expMain + expMonth;
+  const startBalance = (sumFin - expMain).toFixed(2);
   const balance = (sumFin - sumEx).toFixed(2);
 
   const listDates = getDataFromFile(fileNameFormMonth)[fileNameFormMonth];
   const countDays = listDates.length;
+
+  const prognosisInDay = (startBalance / countDays).toFixed(2);
 
   let dateFormat = '';
 
@@ -373,12 +376,15 @@ function checkFormTotal() {
       expMain: expMain,
       expMonth: expMonth,
       expenses: sumEx,
+      startBalance: startBalance,
       balance: balance,
       countDays: countDays,
       lastDays: lastDays,
       willDays: willDays,
+      prognosisInDay: prognosisInDay,
       mediumInDay: (expMonth / lastDays).toFixed(2),
       mediumInDayWill: (balance / willDays).toFixed(2),
+      prognosisExpenses: prognosisInDay * lastDays,
     },
   };
 

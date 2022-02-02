@@ -15,12 +15,15 @@ interface State {
   expMain: number;
   expMonth: number;
   expenses: number;
+  startBalance: number;
   balance: number;
   countDays: number;
   lastDays: number;
   willDays: number;
+  prognosisInDay: number;
   mediumInDay: number;
   mediumInDayWill: number;
+  prognosisExpenses: number;
 }
 
 class FormTotal extends React.Component<Props, State> {
@@ -44,12 +47,15 @@ class FormTotal extends React.Component<Props, State> {
       expMain: 0,
       expMonth: 0,
       expenses: 0,
+      startBalance: 0,
       balance: 0,
       countDays: 0,
       lastDays: 0,
       willDays: 0,
+      prognosisInDay: 0,
       mediumInDay: 0,
       mediumInDayWill: 0,
+      prognosisExpenses: 0,
     };
   }
 
@@ -74,6 +80,10 @@ class FormTotal extends React.Component<Props, State> {
 
         <hr className="form-total__hr-line "></hr>
 
+        <div className="form-total__total">Сумма на начало периода: {this.state.startBalance}</div>
+
+        <hr className="form-total__hr-line "></hr>
+
         <div className="form-total__total">Текущее: {this.state.balance}</div>
 
         <hr className="form-total__hr-line "></hr>
@@ -90,29 +100,22 @@ class FormTotal extends React.Component<Props, State> {
 
         <hr className="form-total__hr-line "></hr>
 
-        <p className="form-total__item">
-          Среднее в день:<span className="form-total__item-count"> {this.state.mediumInDay} </span>
-        </p>
-        <p className="form-total__item">
-          Среднее в день осталось:
-          <span className="form-total__item-count"> {this.state.mediumInDayWill} </span>
-        </p>
-
         <div className="form-total__item form-total__item_grid">
           <p></p>
           <p className="form-total__item-caption">В день</p>
           <p className="form-total__item-caption">Всего</p>
 
           <p className="form-total__item-caption">Прогноз:</p>
-          <p className="form-total__item-count"> 000 </p>
-          <p className="form-total__item-count"> 000 </p>
+          <p className="form-total__item-count"> {this.state.prognosisInDay} </p>
+          <p className="form-total__item-count"> {this.state.prognosisExpenses} </p>
 
           <p className="form-total__item-caption">Фактически:</p>
           <p className="form-total__item-count"> {this.state.mediumInDay} </p>
-          <p className="form-total__item-count"> 000 </p>
+          <p className="form-total__item-count"> {this.state.expMonth} </p>
+
           <p className="form-total__item-caption">Осталось:</p>
           <p className="form-total__item-count"> {this.state.mediumInDayWill} </p>
-          <p className="form-total__item-count"> 0 </p>
+          <p></p>
         </div>
       </div>
     );
