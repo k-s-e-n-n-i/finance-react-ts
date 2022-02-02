@@ -242,11 +242,9 @@ function sortData(formName) {
 
   if (fin !== undefined) {
     fin.sort((a, b) => {
-      const arrA = a.date.split('.');
-      const arrB = b.date.split('.');
-      const dateA = `${arrA[2]}-${arrA[1]}-${arrA[0]}`;
-      const dateB = `${arrB[2]}-${arrB[1]}-${arrB[0]}`;
-      // console.log('sort', dateA, dateB);
+      const dateA = getDateFormat(a.date);
+      const dateB = getDateFormat(b.date);
+
       return new Date(dateA) - new Date(dateB);
     });
   }
@@ -366,4 +364,11 @@ function checkFormTotal() {
   for (const client of clients) {
     client.send(JSON.stringify(json));
   }
+}
+
+function getDateFormat(date) {
+  const arrItemDate = date.split('.');
+  const dateFormat = new Date(arrItemDate[2], arrItemDate[1] - 1, arrItemDate[0], 23, 59, 59, 999);
+
+  return dateFormat;
 }
