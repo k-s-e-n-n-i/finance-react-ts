@@ -1,0 +1,53 @@
+.finance {
+  //background-image: url('./img/finance-background.jpg');
+  background-size: cover;
+  background-position: bottom;
+  width: 100%;
+  min-height: 830px;
+  position: relative;
+
+  @media screen and (max-width: 820px) {
+    height: auto;
+    position: inherit;
+  }
+
+  &__content-container {
+    min-width: 320px;
+    min-height: 830px;
+    margin: 0 9.3% 0 9.7%;
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: 1170px) {
+      margin-left: 20px;
+    }
+
+    @media screen and (max-width: 820px) {
+      display: flex;
+      justify-content: center;
+      margin: 0;
+    }
+  }
+
+  &__form-finance {
+    margin: 20px;
+  }
+
+  &__form-finance_right {
+    grid-row-start: 1;
+    grid-row-end: 6;
+    grid-column-start: 2;
+    grid-column-end: 3;
+  }
+
+  &__forms {
+    margin: 70px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    @media screen and (max-width: 820px) {
+      margin: 20px 0;
+      position: inherit;
+    }
+  }
+}
