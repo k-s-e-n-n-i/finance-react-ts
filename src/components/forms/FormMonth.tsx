@@ -17,11 +17,10 @@ interface Props {
 interface State {
   formUpdate: string;
   allSumForm: number;
-
   listDates: Entry[];
 }
 
-class FormFinance extends React.Component<Props, State> {
+class FormMonth extends React.Component<Props, State> {
   static defaultProps = {
     caption: 'Имя формы',
     name: '',
@@ -40,9 +39,7 @@ class FormFinance extends React.Component<Props, State> {
 
     this.state = {
       formUpdate: '',
-
       allSumForm: 0,
-
       listDates: [],
     };
   }
@@ -77,4 +74,4 @@ class FormFinance extends React.Component<Props, State> {
   }
 }
 
-export default FormFinance;
+export default FormMonth;
