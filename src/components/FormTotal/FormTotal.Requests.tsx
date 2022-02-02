@@ -48,6 +48,11 @@ class Requests {
             expMonth: data[formName].expMonth,
             expenses: data[formName].expenses,
             balance: data[formName].balance,
+            countDays: data[formName].countDays,
+            lastDays: data[formName].lastDays,
+            willDays: data[formName].willDays,
+            mediumInDay: data[formName].mediumInDay,
+            mediumInDayWill: data[formName].mediumInDayWill,
           });
         }
 

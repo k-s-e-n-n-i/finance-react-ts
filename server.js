@@ -342,22 +342,43 @@ function createListDates(startdate) {
 }
 
 function checkFormTotal() {
-  let fileName = 'formTotal';
+  const fileNameFormTotal = 'formTotal';
+  const fileNameFormMonth = `${year}.${monthStr}.listDates`;
 
   const sumFin = total('formFinance');
   const expMain = total('formExpenses');
-  console.log(`${year}.${monthStr}.listDates`);
-  const expMonth = total(`${year}.${monthStr}.listDates`);
+  const expMonth = total(fileNameFormMonth);
   const sumEx = expMain + expMonth;
+  const balance = (sumFin - sumEx).toFixed(2);
+
+  const listDates = getDataFromFile(fileNameFormMonth)[fileNameFormMonth];
+  const countDays = listDates.length;
+
+  let dateFormat = '';
+
+  let lastDays = 0;
+  listDates.forEach((item) => {
+    dateFormat = getDateFormat(item.date);
+    if (dateFormat < new Date()) {
+      lastDays++;
+    }
+  });
+
+  const willDays = countDays - lastDays;
 
   const json = {
-    form: fileName,
-    [fileName]: {
+    form: fileNameFormTotal,
+    [fileNameFormTotal]: {
       finance: sumFin,
       expMain: expMain,
       expMonth: expMonth,
       expenses: sumEx,
-      balance: (sumFin - sumEx).toFixed(2),
+      balance: balance,
+      countDays: countDays,
+      lastDays: lastDays,
+      willDays: willDays,
+      mediumInDay: (expMonth / lastDays).toFixed(2),
+      mediumInDayWill: (balance / willDays).toFixed(2),
     },
   };
 
