@@ -79,7 +79,7 @@ webSocketServer.on('connection', function (ws) {
   });
 });
 
-//--------------------------------------------------------------
+//------------------------ Основные функции ->
 
 function sendData(formName) {
   if (formName !== undefined) {
@@ -160,6 +160,63 @@ function sendWithoutDeletedEntry(deleteEntry) {
     updateEntrys(idEdit, deleteEntry, 'delete');
   }
 }
+
+function updateFormTotal() {
+  const fileNameFormTotal = 'formTotal';
+  const fileNameFormMonth = `${year}.${monthStr}.listDates`;
+  const dataFormMonth = getDataFromFile(fileNameFormMonth);
+
+  if (dataFormMonth[fileNameFormMonth] != undefined) {
+    const sumFin = total('formFinance');
+    const expMain = total('formExpenses');
+    const expMonth = total(fileNameFormMonth);
+    const sumEx = expMain + expMonth;
+    const startBalance = (sumFin - expMain).toFixed(2);
+    const balance = (sumFin - sumEx).toFixed(2);
+
+    const listDates = dataFormMonth[fileNameFormMonth];
+    const countDays = listDates.length;
+
+    const prognosisInDay = (startBalance / countDays).toFixed(2);
+
+    let dateFormat = '';
+
+    let lastDays = 0;
+    listDates.forEach((item) => {
+      dateFormat = getDateFormat(item.date);
+      if (dateFormat < new Date()) {
+        lastDays++;
+      }
+    });
+
+    const willDays = countDays - lastDays;
+
+    const json = {
+      form: fileNameFormTotal,
+      [fileNameFormTotal]: {
+        finance: sumFin,
+        expMain: expMain,
+        expMonth: expMonth,
+        expenses: sumEx,
+        startBalance: startBalance,
+        balance: balance,
+        countDays: countDays,
+        lastDays: lastDays,
+        willDays: willDays,
+        prognosisInDay: prognosisInDay,
+        mediumInDay: (expMonth / lastDays).toFixed(2),
+        mediumInDayWill: (balance / willDays).toFixed(2),
+        prognosisExpenses: prognosisInDay * lastDays,
+      },
+    };
+
+    for (const client of clients) {
+      client.send(JSON.stringify(json));
+    }
+  }
+}
+
+//------------------------ Дополнительные функции к основным->
 
 function updateEntrys(idEntry, objData, typeRequest) {
   const formName = objData.formName;
@@ -288,6 +345,13 @@ function sortData(formName) {
   console.log(`Данные отсортированы`);
 }
 
+function getDateFormat(date) {
+  const arrItemDate = date.split('.');
+  const dateFormat = new Date(arrItemDate[2], arrItemDate[1] - 1, arrItemDate[0], 23, 59, 59, 999);
+
+  return dateFormat;
+}
+
 function runStart(formName) {
   const fileName = formName;
   let newJSON = {},
@@ -314,8 +378,6 @@ function runStart(formName) {
   console.log(`Перезаписан data.json: изменено состояние на main`);
 }
 
-//--------------------------------------------------------------
-
 function total(fileName) {
   let getData,
     sum = 0;
@@ -332,7 +394,7 @@ function total(fileName) {
   return sum;
 }
 
-//--------------------------------------------------------------
+//------------------------ Фоновые функции ->
 
 function createListDates(startdate) {
   const day = startdate.getDate();
@@ -371,66 +433,4 @@ function createListDates(startdate) {
   fs.writeFileSync(`data/${year}.${monthStart}.listDates.json`, JSON.stringify(json));
 
   return endDate;
-}
-
-function updateFormTotal() {
-  const fileNameFormTotal = 'formTotal';
-  const fileNameFormMonth = `${year}.${monthStr}.listDates`;
-  const dataFormMonth = getDataFromFile(fileNameFormMonth);
-
-  if (dataFormMonth[fileNameFormMonth] != undefined) {
-    const sumFin = total('formFinance');
-    const expMain = total('formExpenses');
-    const expMonth = total(fileNameFormMonth);
-    const sumEx = expMain + expMonth;
-    const startBalance = (sumFin - expMain).toFixed(2);
-    const balance = (sumFin - sumEx).toFixed(2);
-
-    const listDates = dataFormMonth[fileNameFormMonth];
-    const countDays = listDates.length;
-
-    const prognosisInDay = (startBalance / countDays).toFixed(2);
-
-    let dateFormat = '';
-
-    let lastDays = 0;
-    listDates.forEach((item) => {
-      dateFormat = getDateFormat(item.date);
-      if (dateFormat < new Date()) {
-        lastDays++;
-      }
-    });
-
-    const willDays = countDays - lastDays;
-
-    const json = {
-      form: fileNameFormTotal,
-      [fileNameFormTotal]: {
-        finance: sumFin,
-        expMain: expMain,
-        expMonth: expMonth,
-        expenses: sumEx,
-        startBalance: startBalance,
-        balance: balance,
-        countDays: countDays,
-        lastDays: lastDays,
-        willDays: willDays,
-        prognosisInDay: prognosisInDay,
-        mediumInDay: (expMonth / lastDays).toFixed(2),
-        mediumInDayWill: (balance / willDays).toFixed(2),
-        prognosisExpenses: prognosisInDay * lastDays,
-      },
-    };
-
-    for (const client of clients) {
-      client.send(JSON.stringify(json));
-    }
-  }
-}
-
-function getDateFormat(date) {
-  const arrItemDate = date.split('.');
-  const dateFormat = new Date(arrItemDate[2], arrItemDate[1] - 1, arrItemDate[0], 23, 59, 59, 999);
-
-  return dateFormat;
 }
