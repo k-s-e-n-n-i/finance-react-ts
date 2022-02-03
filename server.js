@@ -45,6 +45,8 @@ webSocketServer.on('connection', function (ws) {
   clients.add(ws);
   console.log(`Новое соединение ${clients}`);
 
+  sendArrDirMonth(); // отправляем массив со списом имен директорий в /data
+
   ws.on('message', function (msg) {
     console.log(`\nПолучено сообщение: ${msg}`);
 
@@ -439,4 +441,18 @@ function createListDates(startdate) {
   fs.writeFileSync(`data/${year}.${monthStr}/${year}.${monthStart}.listDates.json`, JSON.stringify(json));
 
   return endDate;
+}
+
+function sendArrDirMonth() {
+  const arrDirMonth = fs.readdirSync('./data');
+  const json = {
+    arrDirMonth: arrDirMonth,
+  };
+
+  for (const client of clients) {
+    client.send(JSON.stringify(json));
+  }
+  console.log('отправляю');
+
+  return;
 }
