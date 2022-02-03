@@ -33,23 +33,44 @@ try {
   createListDates(new Date(year, monthForFile, startPepriod));
 }
 
+// запускаем WebSocketServer
 const webSocketServer = new WebSocketServer.Server({ port: 9001 });
 webSocketServer.on('connection', function (ws) {
   clients.add(ws);
   console.log(`Новое соединение ${clients}`);
 
-  ws.on('message', function (message) {
-    console.log(`\nПолучено сообщение: ${message}`);
+  ws.on('message', function (msg) {
+    console.log(`\nПолучено сообщение: ${msg}`);
 
-    const messageToString = JSON.parse(message);
+    const msgString = JSON.parse(msg);
 
-    checkFormTotal();
+    updateFormTotal(); // получаем сводную статистику и отправляем данные в форму FormTotal
 
-    checkGetData(messageToString);
-    checkAddFinance(messageToString);
-    checkEditEntry(messageToString);
-    checkSaveEntry(messageToString);
-    checkDeleteEntry(messageToString);
+    // проверяем какой запрос пришел
+    switch (msgString.get) {
+      case 'getData': {
+        sendData(msgString.getData);
+        break;
+      }
+      case 'addFinance': {
+        sendAddedFinance(msgString.addFinance);
+        break;
+      }
+      case 'editEntry': {
+        sendEditedEntry(msgString.editEntry);
+        break;
+      }
+      case 'saveEntry': {
+        sendSavedEntry(msgString.saveEntry);
+        break;
+      }
+      case 'deleteEntry': {
+        sendWithoutDeletedEntry(msgString.deleteEntry);
+        break;
+      }
+      default:
+        console.log(`В сообщении не оказалось 'get' параметра`);
+    }
   });
 
   ws.on('close', function () {
@@ -60,8 +81,7 @@ webSocketServer.on('connection', function (ws) {
 
 //--------------------------------------------------------------
 
-function checkGetData(messageToString) {
-  const formName = messageToString.getData;
+function sendData(formName) {
   if (formName !== undefined) {
     runStart(formName);
     const getDataFile = getDataFromFile(formName);
@@ -82,13 +102,13 @@ function checkGetData(messageToString) {
   }
 }
 
-function checkAddFinance(messageToString) {
-  if (messageToString.addFinance !== undefined) {
-    const formName = messageToString.formName;
+function sendAddedFinance(addFinance) {
+  if (addFinance !== undefined) {
+    const formName = addFinance.formName;
 
     writeData(
       {
-        [formName]: messageToString.addFinance,
+        [formName]: addFinance,
       },
       formName
     );
@@ -117,27 +137,24 @@ function checkAddFinance(messageToString) {
   }
 }
 
-function checkEditEntry(messageToString) {
-  if (messageToString.editEntry !== undefined) {
-    const editEntry = messageToString.editEntry;
+function sendEditedEntry(editEntry) {
+  if (editEntry !== undefined) {
     const idEdit = parseInt(editEntry.id);
 
     updateEntrys(idEdit, editEntry, 'edit');
   }
 }
 
-function checkSaveEntry(messageToString) {
-  if (messageToString.saveEntry !== undefined) {
-    const saveEntry = messageToString.saveEntry;
+function sendSavedEntry(saveEntry) {
+  if (saveEntry !== undefined) {
     const idEdit = parseInt(saveEntry.id);
 
     updateEntrys(idEdit, saveEntry, 'save');
   }
 }
 
-function checkDeleteEntry(messageToString) {
-  if (messageToString.deleteEntry !== undefined) {
-    const deleteEntry = messageToString.deleteEntry;
+function sendWithoutDeletedEntry(deleteEntry) {
+  if (deleteEntry !== undefined) {
     const idEdit = parseInt(deleteEntry.id);
 
     updateEntrys(idEdit, deleteEntry, 'delete');
@@ -199,7 +216,7 @@ function updateEntrys(idEntry, objData, typeRequest) {
   console.log(`Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest})`);
 
   sortData(formName);
-  checkFormTotal();
+  updateFormTotal();
 
   const allSum = total(formName);
 
@@ -232,7 +249,7 @@ function writeData(postJSON, formName) {
 
   fs.writeFileSync(`data/${fileName}.json`, JSON.stringify(newJSON));
   sortData(formName);
-  checkFormTotal();
+  updateFormTotal();
 
   const json = getDataFromFile(formName);
   console.log('Перезаписан data.json:');
@@ -356,7 +373,7 @@ function createListDates(startdate) {
   return endDate;
 }
 
-function checkFormTotal() {
+function updateFormTotal() {
   const fileNameFormTotal = 'formTotal';
   const fileNameFormMonth = `${year}.${monthStr}.listDates`;
   const dataFormMonth = getDataFromFile(fileNameFormMonth);
@@ -365,7 +382,6 @@ function checkFormTotal() {
     const sumFin = total('formFinance');
     const expMain = total('formExpenses');
     const expMonth = total(fileNameFormMonth);
-    console.log(fileNameFormMonth, expMonth);
     const sumEx = expMain + expMonth;
     const startBalance = (sumFin - expMain).toFixed(2);
     const balance = (sumFin - sumEx).toFixed(2);

@@ -172,6 +172,7 @@ class Requests {
       const notification = form.querySelector('.form-finance__notification');
       if (form.date.value !== '' && form.sumEntry.value !== '') {
         const postJSON = {
+          get: 'addFinance',
           addFinance: {
             date: form.date.value,
             sumStr: sumStr,
@@ -179,8 +180,8 @@ class Requests {
             name: form.nameEntry.value,
             state: 'main',
             id: new Date().getTime(),
+            formName: nameFormSend,
           },
-          formName: nameFormSend,
         };
         console.log(`Отправлены данные:${JSON.stringify(postJSON)}`);
         socket.send(JSON.stringify(postJSON));
@@ -204,10 +205,12 @@ class Requests {
 
     if (nameformMonth) {
       postJSON = {
+        get: 'getData',
         getData: `${year}.${month}.listDates`,
       };
     } else {
       postJSON = {
+        get: 'getData',
         getData: nameFormSend,
       };
     }
@@ -230,6 +233,7 @@ class Requests {
         formName = nameFormSend;
       }
       const postJSON = {
+        get: 'editEntry',
         editEntry: {
           id: form.getAttribute('id'),
           formName: formName,
@@ -304,6 +308,7 @@ class Requests {
 
     if (nameformMonth && form.sumEntry.value !== '') {
       postJSON = {
+        get: 'saveEntry',
         saveEntry: {
           id: form.getAttribute('id'),
           date: form.querySelector('.entry-history__item_date')?.innerHTML,
@@ -317,6 +322,7 @@ class Requests {
     } else {
       if (form.date.value !== '' && form.sumEntry.value !== '') {
         postJSON = {
+          get: 'saveEntry',
           saveEntry: {
             id: form.getAttribute('id'),
             date: form.date.value,
@@ -361,6 +367,7 @@ class Requests {
   sendDeleteEntry(form: HTMLFormElement) {
     const { socket, nameFormSend } = this;
     const postJSON = {
+      get: 'deleteEntry',
       deleteEntry: {
         id: form.getAttribute('id'),
         formName: nameFormSend,
