@@ -344,52 +344,56 @@ function createListDates(startdate) {
 function checkFormTotal() {
   const fileNameFormTotal = 'formTotal';
   const fileNameFormMonth = `${year}.${monthStr}.listDates`;
+  const dataFormMonth = getDataFromFile(fileNameFormMonth);
 
-  const sumFin = total('formFinance');
-  const expMain = total('formExpenses');
-  const expMonth = total(fileNameFormMonth);
-  const sumEx = expMain + expMonth;
-  const startBalance = (sumFin - expMain).toFixed(2);
-  const balance = (sumFin - sumEx).toFixed(2);
+  if (dataFormMonth[fileNameFormMonth] != undefined) {
+    const sumFin = total('formFinance');
+    const expMain = total('formExpenses');
+    const expMonth = total(fileNameFormMonth);
+    console.log(fileNameFormMonth, expMonth);
+    const sumEx = expMain + expMonth;
+    const startBalance = (sumFin - expMain).toFixed(2);
+    const balance = (sumFin - sumEx).toFixed(2);
 
-  const listDates = getDataFromFile(fileNameFormMonth)[fileNameFormMonth];
-  const countDays = listDates.length;
+    const listDates = dataFormMonth[fileNameFormMonth];
+    const countDays = listDates.length;
 
-  const prognosisInDay = (startBalance / countDays).toFixed(2);
+    const prognosisInDay = (startBalance / countDays).toFixed(2);
 
-  let dateFormat = '';
+    let dateFormat = '';
 
-  let lastDays = 0;
-  listDates.forEach((item) => {
-    dateFormat = getDateFormat(item.date);
-    if (dateFormat < new Date()) {
-      lastDays++;
+    let lastDays = 0;
+    listDates.forEach((item) => {
+      dateFormat = getDateFormat(item.date);
+      if (dateFormat < new Date()) {
+        lastDays++;
+      }
+    });
+
+    const willDays = countDays - lastDays;
+
+    const json = {
+      form: fileNameFormTotal,
+      [fileNameFormTotal]: {
+        finance: sumFin,
+        expMain: expMain,
+        expMonth: expMonth,
+        expenses: sumEx,
+        startBalance: startBalance,
+        balance: balance,
+        countDays: countDays,
+        lastDays: lastDays,
+        willDays: willDays,
+        prognosisInDay: prognosisInDay,
+        mediumInDay: (expMonth / lastDays).toFixed(2),
+        mediumInDayWill: (balance / willDays).toFixed(2),
+        prognosisExpenses: prognosisInDay * lastDays,
+      },
+    };
+
+    for (const client of clients) {
+      client.send(JSON.stringify(json));
     }
-  });
-
-  const willDays = countDays - lastDays;
-
-  const json = {
-    form: fileNameFormTotal,
-    [fileNameFormTotal]: {
-      finance: sumFin,
-      expMain: expMain,
-      expMonth: expMonth,
-      expenses: sumEx,
-      startBalance: startBalance,
-      balance: balance,
-      countDays: countDays,
-      lastDays: lastDays,
-      willDays: willDays,
-      prognosisInDay: prognosisInDay,
-      mediumInDay: (expMonth / lastDays).toFixed(2),
-      mediumInDayWill: (balance / willDays).toFixed(2),
-      prognosisExpenses: prognosisInDay * lastDays,
-    },
-  };
-
-  for (const client of clients) {
-    client.send(JSON.stringify(json));
   }
 }
 
