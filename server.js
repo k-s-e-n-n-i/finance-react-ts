@@ -2,20 +2,35 @@ const WebSocketServer = new require('ws');
 const fs = require('fs');
 const clients = new Set();
 
+// Определение текущей даты
 const today = new Date();
 const day = today.getDate();
 const month = today.getMonth();
-day < 25
-  ? (monthStr = month < 10 ? `0${month}` : `${month}`)
-  : (monthStr = month + 1 < 10 ? `0${month + 1}` : month + 1);
+let monthStr, monthForFile;
+if (day < 25) {
+  // если число с 1 до 24, то файл считается за предыдущий месяц, поэтому значение месяца уменьшаем на 1
+  monthStr = month < 10 ? `0${month}` : `${month}`; // т.к. месяцы с 0 до 11, для строки не уменьшаем
+  monthForFile = month - 1;
+} else {
+  monthStr = month + 1 < 10 ? `0${month + 1}` : month + 1;
+  monthForFile = month;
+}
 const year = today.getFullYear();
 
-if (today.getDate() === 25) {
-  try {
-    fs.readFileSync(`${year}.${monthStr}.listDates.json`, 'utf8');
-  } catch (e) {
-    createListDates(today);
+const startPepriod = 25; // задаем число, которое является началом периода
+
+try {
+  // проверяем наличие файла ХХХХ.ХХ.listDates.json
+  const fileListDates = fs.readFileSync(`data/${year}.${monthStr}.listDates.json`, 'utf8');
+  const listDates = JSON.parse(fileListDates)[`${year}.${monthStr}.listDates`];
+
+  if (listDates.length == 0) {
+    // если файл есть, но пустой, то создаем от ближайшего прошедшего 25го числа
+    createListDates(new Date(year, monthForFile, startPepriod));
   }
+} catch (e) {
+  // если файла нет, то создаем от ближайшего прошедшего 25го числа
+  createListDates(new Date(year, monthForFile, startPepriod));
 }
 
 const webSocketServer = new WebSocketServer.Server({ port: 9001 });
