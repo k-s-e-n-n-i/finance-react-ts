@@ -179,7 +179,7 @@ function updateEntrys(idEntry, objData, typeRequest) {
 
   newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
-  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
+  fs.writeFileSync(`data/${fileName}.json`, JSON.stringify(newJSON));
   const json = getDataFromFile(formName);
   console.log(`Перезаписан data.json: изменено состояние id=${idEntry} (${typeRequest})`);
 
@@ -215,7 +215,7 @@ function writeData(postJSON, formName) {
     }
   });
 
-  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
+  fs.writeFileSync(`data/${fileName}.json`, JSON.stringify(newJSON));
   sortData(formName);
   checkFormTotal();
 
@@ -227,10 +227,10 @@ function writeData(postJSON, formName) {
 function getDataFromFile(fileName) {
   let getData;
   try {
-    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+    getData = JSON.parse(fs.readFileSync(`data/${fileName}.json`, 'utf8'));
   } catch (e) {
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify({}));
-    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+    fs.writeFileSync(`data/${fileName}.json`, JSON.stringify({}));
+    getData = JSON.parse(fs.readFileSync(`data/${fileName}.json`, 'utf8'));
   }
   return getData;
 }
@@ -251,7 +251,7 @@ function sortData(formName) {
 
   const newFinance = Object.assign({ [formName]: fin }, getDataFile);
 
-  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newFinance));
+  fs.writeFileSync(`data/${fileName}.json`, JSON.stringify(newFinance));
 
   console.log(`Данные отсортированы`);
 }
@@ -277,7 +277,7 @@ function runStart(formName) {
 
   newJSON = Object.assign(getDataFile, { [formName]: newFin });
 
-  fs.writeFileSync(`${fileName}.json`, JSON.stringify(newJSON));
+  fs.writeFileSync(`data/${fileName}.json`, JSON.stringify(newJSON));
 
   console.log(`Перезаписан data.json: изменено состояние на main`);
 }
@@ -288,13 +288,13 @@ function total(fileName) {
   let getData,
     sum = 0;
   try {
-    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+    getData = JSON.parse(fs.readFileSync(`data/${fileName}.json`, 'utf8'));
     getData[fileName].forEach((item) => {
       item.sum != '' ? (sum = sum + parseFloat(item.sum)) : (sum = sum + 0);
     });
   } catch (e) {
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify({}));
-    getData = JSON.parse(fs.readFileSync(`${fileName}.json`, 'utf8'));
+    fs.writeFileSync(`data/${fileName}.json`, JSON.stringify({}));
+    getData = JSON.parse(fs.readFileSync(`data/${fileName}.json`, 'utf8'));
   }
 
   return sum;
@@ -336,7 +336,7 @@ function createListDates(startdate) {
 
   let json = { [`${year}.${monthStart}.listDates`]: listDates };
 
-  fs.writeFileSync(`${year}.${monthStart}.listDates.json`, JSON.stringify(json));
+  fs.writeFileSync(`data/${year}.${monthStart}.listDates.json`, JSON.stringify(json));
 
   return endDate;
 }
