@@ -23,17 +23,19 @@ class App extends Component<Props, State> {
 
   render() {
     const startPage = <StartPage dirs={this.state.arrDirMonth} />;
-    const finance = <Finance />;
 
     return (
       <Router basename={basename}>
         <Routes>
           <Route path="/" element={<Layout header={0} content={startPage} footer={0} />} />
-          <Route path="/finance" element={<Layout header={0} content={finance} footer={0} />} />
+          <Route
+            path="/finance"
+            element={<Layout header={0} content={<Finance date={'2022.01'} />} footer={0} />}
+          />
           {this.state.arrDirMonth.map((item, index) => (
             <Route
               path={`/finance${item}`}
-              element={<Layout header={0} content={finance} footer={0} />}
+              element={<Layout header={0} content={<Finance date={item} />} footer={0} />}
               key={`app-${index}`}
             />
           ))}

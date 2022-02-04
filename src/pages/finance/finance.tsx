@@ -4,11 +4,24 @@ import FormFinance from '../../components/forms/FormFinance';
 import FormMonth from '../../components/forms/FormMonth';
 import FormTotal from '../../components/FormTotal/FormTotal';
 
-class Finance extends React.Component<{}> {
+interface Props {
+  date?: string;
+}
+
+class Finance extends React.Component<Props> {
+  dateFile: string;
+
+  constructor(props: Props) {
+    super(props);
+    this.dateFile = this.props.date || '';
+  }
   render() {
     return (
       <main className="finance">
         <div className="finance__content-container">
+          <div className="finance__caption">
+            <h1>{this.dateFile}</h1>
+          </div>
           <div className="finance__forms">
             {/* При добавлении новой формы FormFinance нужно указать name и прописать его в this.state.arrNamesForms FormFinance.tsx */}
             <div className="finance__form-finance">
