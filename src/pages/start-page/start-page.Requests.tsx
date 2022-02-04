@@ -1,16 +1,14 @@
 class Requests {
-  compFormTotal: React.Component;
-  nameFormTotal: string;
+  compStartPage: React.Component;
   socket: WebSocket;
 
   /**
    *
-   * @param compFormTotal - this у компонента FormTotal
+   * @param compStartPage - this у компонента FormTotal
    * @param form - родительский блок всего компонента FormTotal ('.form-finance')
    */
-  constructor(compFormTotal: React.Component) {
-    this.compFormTotal = compFormTotal;
-    this.nameFormTotal = 'formTotal';
+  constructor(compStartPage: React.Component) {
+    this.compStartPage = compStartPage;
 
     if (!window.WebSocket) {
       document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
@@ -28,7 +26,7 @@ class Requests {
   }
 
   getHistory() {
-    let { socket, nameFormTotal, compFormTotal } = this;
+    let { socket, compStartPage } = this;
 
     socket.onopen = () => {
       console.log('Соединение установлено.');
@@ -41,7 +39,7 @@ class Requests {
 
       if (arrDirMonth !== undefined) {
         console.log(`Принят массив имен папок: ${arrDirMonth}`);
-        compFormTotal.setState({
+        compStartPage.setState({
           arrDirMonth: arrDirMonth,
         });
       }
