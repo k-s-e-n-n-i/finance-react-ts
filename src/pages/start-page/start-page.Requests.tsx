@@ -17,7 +17,7 @@ class Requests {
     let socketHost = 'ws://localhost:9001';
 
     if (window.location.host === 'ksenni.ru') {
-      socketHost = 'wss://ksenni.ru:9001';
+      socketHost = 'wss://212.193.53.202:9001';
     }
 
     const socket = new WebSocket(socketHost);
