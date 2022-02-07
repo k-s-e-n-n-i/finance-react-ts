@@ -16,10 +16,6 @@ type Soc = {
 };
 
 class Social extends React.Component<Props> {
-  static defaultProps = {
-    id: 'soc',
-  };
-
   data: Props;
   twitter: Soc;
   facebook: Soc;
@@ -53,12 +49,15 @@ class Social extends React.Component<Props> {
   }
 
   render() {
+    const {
+      data: { id = 'soc' },
+    } = this;
     return (
       <div className="social">
         {this.socs.map(
           (soc, index) =>
             soc.on && (
-              <span className="social__item" key={`${this.data.id}item${index}`}>
+              <span className="social__item" key={`${id}item${index}`}>
                 <a href={soc.link}>
                   <img className={`social__item ${soc.name}`} src={soc.icon} alt={soc.name}></img>
                 </a>

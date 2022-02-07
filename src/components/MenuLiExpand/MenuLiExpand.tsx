@@ -12,10 +12,6 @@ type Menu = {
 };
 
 class MenuLiExpand extends React.Component<Props> {
-  static defaultProps = {
-    item: {},
-  };
-
   data: Props;
   myRef: React.RefObject<HTMLLIElement>;
 

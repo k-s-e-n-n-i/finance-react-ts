@@ -12,12 +12,6 @@ type Props = {
 };
 
 export class EntryHistoryMainMonth extends React.Component<Props> {
-  static defaultProps = {
-    date: 'дд.мм.гггг',
-    sum: '0',
-    name: '',
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -27,7 +21,7 @@ export class EntryHistoryMainMonth extends React.Component<Props> {
 
   render() {
     const {
-      data: { date, idItem, sum, name },
+      data: { date = 'дд.мм.гггг', idItem, sum = '0', name = '' },
     } = this;
     return (
       <form className="entry-history entry-history_main month" name={`entry${idItem}`} id={`${idItem}`}>

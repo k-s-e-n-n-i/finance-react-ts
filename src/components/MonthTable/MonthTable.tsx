@@ -12,13 +12,6 @@ interface Props {
 }
 
 class MonthTable extends React.Component<Props> {
-  static defaultProps = {
-    date: 'дд.мм.гггг',
-    sum: '0',
-    name: '',
-    id: '0',
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -28,7 +21,7 @@ class MonthTable extends React.Component<Props> {
 
   render() {
     const {
-      props: {
+      data: {
         stateForm: { listDates },
       },
     } = this;

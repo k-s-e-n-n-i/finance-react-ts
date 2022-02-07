@@ -2,20 +2,13 @@ import React from 'react';
 import './link.scss';
 
 type Props = {
-  url: string;
-  text: string;
-  type: string;
-  classBlock: string;
+  url?: string;
+  text?: string;
+  type?: string;
+  classBlock?: string;
 };
 
 class Link extends React.Component<Props> {
-  static defaultProps = {
-    url: './link-stub',
-    text: 'Ссылка',
-    type: '',
-    classBlock: '',
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -23,8 +16,7 @@ class Link extends React.Component<Props> {
     this.data = this.props;
   }
 
-  defineType() {
-    const type = this.props.type;
+  defineType(type: string) {
     switch (type) {
       case 'gray': {
         return 'link link_gray';
@@ -42,11 +34,11 @@ class Link extends React.Component<Props> {
   }
   render() {
     const {
-      data: { classBlock, url, text },
+      data: { url = './link-stub', text = 'Ссылка', type = '', classBlock = '' },
     } = this;
     return (
       <div className={classBlock}>
-        <a className={this.defineType()} href={url}>
+        <a className={this.defineType(type)} href={url}>
           {text}
         </a>
       </div>

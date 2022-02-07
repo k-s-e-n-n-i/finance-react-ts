@@ -7,13 +7,6 @@ type Props = {
 };
 
 class TopicLabel extends React.Component<Props> {
-  static defaultProps = {
-    data: {
-      topic: '',
-      label: '',
-    },
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -22,8 +15,8 @@ class TopicLabel extends React.Component<Props> {
   }
 
   render() {
-    let {
-      data: { topic, label },
+    const {
+      data: { topic = '', label = '' },
     } = this;
 
     return topic !== '' && label !== '' ? (

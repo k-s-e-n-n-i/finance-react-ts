@@ -11,15 +11,6 @@ type Props = {
 };
 
 class ButtonSubmit extends React.Component<Props> {
-  static defaultProps = {
-    text: 'Текст',
-    name: '',
-    height: 'wide',
-    border: true,
-    arrow: false,
-    hover: false,
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -28,7 +19,7 @@ class ButtonSubmit extends React.Component<Props> {
   }
   render() {
     let {
-      data: { text, name, height, border, arrow, hover },
+      data: { text = 'Текст', name = '', height = 'wide', border = false, arrow = false, hover = false },
     } = this;
 
     return (

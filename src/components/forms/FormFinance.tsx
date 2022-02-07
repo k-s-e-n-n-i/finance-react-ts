@@ -9,11 +9,9 @@ import { Requests } from './FormFinance.Requests';
 import { HistoryList } from '../../modules/interfaces';
 
 interface Props {
-  caption: string;
-  name: string;
-  type: string;
-  classBlock: string;
-  colorForm: string;
+  caption?: string;
+  name?: string;
+  colorForm?: string;
 }
 
 interface State {
@@ -24,14 +22,6 @@ interface State {
 }
 
 class FormFinance extends React.Component<Props, State> {
-  static defaultProps = {
-    caption: 'Имя формы',
-    name: '',
-    type: '',
-    classBlock: '',
-    colorForm: '',
-  };
-
   data: Props;
   refForm: React.RefObject<HTMLDivElement>;
 
@@ -50,11 +40,11 @@ class FormFinance extends React.Component<Props, State> {
 
   render() {
     let {
-      data: { caption, name, colorForm },
+      data: { caption = 'Имя формы', name = '', colorForm = '' },
       refForm,
     } = this;
 
-    colorForm = `form-finance_${colorForm}`;
+    colorForm = colorForm != '' ? `form-finance_${colorForm}` : '';
 
     const today = new Date();
     const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;

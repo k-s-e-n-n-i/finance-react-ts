@@ -20,12 +20,6 @@ interface Menu {
 }
 
 class Layout extends React.Component<Props> {
-  static defaultProps = {
-    header: 1,
-    content: <h1>Hi!</h1>,
-    footer: 1,
-  };
-
   header: HeaderType;
   footer: {
     on: Boolean;

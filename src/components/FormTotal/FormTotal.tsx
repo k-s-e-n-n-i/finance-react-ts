@@ -6,9 +6,6 @@ import FormFinance from '../forms/FormFinance';
 
 interface Props {
   caption: string;
-  name: string;
-  type: string;
-  classBlock: string;
 }
 
 interface State {
@@ -28,13 +25,6 @@ interface State {
 }
 
 class FormTotal extends React.Component<Props, State> {
-  static defaultProps = {
-    caption: 'Имя формы',
-    name: '',
-    type: '',
-    classBlock: '',
-  };
-
   data: Props;
   refForm: React.RefObject<HTMLDivElement>;
 
@@ -62,7 +52,7 @@ class FormTotal extends React.Component<Props, State> {
 
   render() {
     let {
-      data: { caption },
+      data: { caption = 'Имя формы' },
       refForm,
     } = this;
 

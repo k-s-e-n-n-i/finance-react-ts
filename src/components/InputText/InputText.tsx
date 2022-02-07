@@ -6,26 +6,16 @@ import TopicLabel from '../../components/topic-label/topic-label';
 
 type Props = {
   id: string;
-  topic: string;
+  topic?: string;
   label?: string;
   placeholder?: string;
   inputText?: string;
-  state: string;
-  type: string;
-  name: string;
+  state?: string;
+  type?: string;
+  name?: string;
 };
 
 class InputText extends React.Component<Props> {
-  static defaultProps = {
-    topic: '',
-    label: '',
-    placeholder: 'Введите данные...',
-    inputText: '',
-    state: '',
-    type: '',
-    name: '',
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -45,7 +35,16 @@ class InputText extends React.Component<Props> {
 
   render() {
     let {
-      data: { id, topic, label, placeholder, inputText, state, type, name },
+      data: {
+        id,
+        topic = '',
+        label = '',
+        placeholder = 'Введите данные...',
+        inputText = '',
+        state = '',
+        type = '',
+        name = '',
+      },
     } = this;
     let pattern, title;
 

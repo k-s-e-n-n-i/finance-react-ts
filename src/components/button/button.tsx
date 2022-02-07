@@ -11,15 +11,6 @@ type Props = {
 };
 
 class Button extends React.Component<Props> {
-  static defaultProps = {
-    text: 'Текст',
-    link: './link-stub',
-    height: 'wide',
-    border: false,
-    arrow: false,
-    hover: false,
-  };
-
   data: Props;
 
   constructor(props: Props) {
@@ -28,7 +19,14 @@ class Button extends React.Component<Props> {
   }
   render() {
     let {
-      data: { text, link, height, border, arrow, hover },
+      data: {
+        text = 'Текст',
+        link = './link-stub',
+        height = 'wide',
+        border = false,
+        arrow = false,
+        hover = false,
+      },
     } = this;
 
     return (

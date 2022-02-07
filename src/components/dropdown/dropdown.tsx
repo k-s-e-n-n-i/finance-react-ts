@@ -18,17 +18,6 @@ type Props = {
 };
 
 class Dropdown extends React.Component<Props> {
-  static defaultProps = {
-    name: 'nameDropdown',
-    topic: 'Заголовок',
-    label: '',
-    activeText: 'Текст',
-    id: '',
-    state: 'close',
-    hasBtns: true,
-    items: [],
-  };
-
   data: Props;
   dropdownOpenClass: string;
   dropdownItemsHiddenClass: string;
@@ -43,7 +32,16 @@ class Dropdown extends React.Component<Props> {
 
   render() {
     let {
-      data: { name, topic, label, activeText, id, state, hasBtns, items },
+      data: {
+        name = 'nameDropdown',
+        topic = 'Заголовок',
+        label = '',
+        activeText = 'Текст',
+        id = '',
+        state = 'close',
+        hasBtns = true,
+        items = [],
+      },
       dropdownOpenClass,
       dropdownItemsHiddenClass,
     } = this;

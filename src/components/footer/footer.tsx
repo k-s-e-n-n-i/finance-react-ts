@@ -7,8 +7,6 @@ import InputText from '../../components/InputText/InputText';
 type Props = {
   id?: string;
   footerMenu?: ColumnMenu[];
-  authorization?: boolean;
-  userName?: string;
 };
 
 type ColumnMenu = {
@@ -21,13 +19,6 @@ type ItemMenu = {
 };
 
 class Footer extends React.Component<Props> {
-  static defaultProps = {
-    id: 'footer',
-    footerMenu: false,
-    authorization: false,
-    userName: 'Имя',
-  };
-
   data: Props;
   footerMenu: ColumnMenu[];
   inputSubscription: {
@@ -97,6 +88,9 @@ class Footer extends React.Component<Props> {
   }
 
   render() {
+    const {
+      data: { id = 'footer' },
+    } = this;
     return (
       <footer className="footer">
         <div className="footer__block-menu">
@@ -110,12 +104,12 @@ class Footer extends React.Component<Props> {
 
             <ul className="footer__footer-menu">
               {this.footerMenu.map((column: ColumnMenu, index) => (
-                <li className="footer__menu-column" key={`${this.data.id}col${index}`}>
+                <li className="footer__menu-column" key={`${id}col${index}`}>
                   <ul className="footer__menu-list">
                     <li className="footer__menu-topic-column">{column.text}</li>
                     {column.listMenu &&
                       column.listMenu.map((itemLink: ItemMenu, index) => (
-                        <li className="footer__menu-li" key={`${this.data.id}li${index}`}>
+                        <li className="footer__menu-li" key={`${id}li${index}`}>
                           <a className="footer__menu-a" href={itemLink.link || './link-stub'}>
                             {itemLink.text}
                           </a>

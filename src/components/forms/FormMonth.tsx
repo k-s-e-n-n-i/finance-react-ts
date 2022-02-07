@@ -8,9 +8,6 @@ import { Entry } from '../../modules/interfaces';
 
 interface Props {
   caption: string;
-  name: string;
-  type: string;
-  classBlock: string;
   colorForm: string;
 }
 
@@ -21,14 +18,6 @@ interface State {
 }
 
 class FormMonth extends React.Component<Props, State> {
-  static defaultProps = {
-    caption: 'Имя формы',
-    name: '',
-    type: '',
-    classBlock: '',
-    colorForm: '',
-  };
-
   data: Props;
   refForm: React.RefObject<HTMLDivElement>;
 
@@ -46,11 +35,11 @@ class FormMonth extends React.Component<Props, State> {
 
   render() {
     let {
-      data: { caption, colorForm },
+      data: { caption = 'Имя формы', colorForm = '' },
       refForm,
     } = this;
 
-    colorForm = `form-finance_${colorForm}`;
+    colorForm = colorForm != '' ? `form-finance_${colorForm}` : '';
 
     return (
       <div className={`form-finance ${colorForm}`} data-name="listDates" ref={refForm}>

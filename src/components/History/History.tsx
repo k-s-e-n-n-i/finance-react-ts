@@ -14,13 +14,6 @@ interface Props {
 }
 
 class History extends React.Component<Props> {
-  static defaultProps = {
-    date: 'дд.мм.гггг',
-    sum: '0',
-    name: '',
-    id: '0',
-  };
-
   data: Props;
 
   constructor(props: Props) {

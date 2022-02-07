@@ -9,7 +9,7 @@ import Btn from '../button/button';
 import MenuLiExpand from '../MenuLiExpand/MenuLiExpand';
 
 type Props = {
-  id: string;
+  id?: string;
   menuItems?: Menu[];
   authorization?: boolean;
   userName?: string;
@@ -29,13 +29,6 @@ type Button = {
 };
 
 class Header extends React.Component<Props> {
-  static defaultProps = {
-    id: 'header',
-    menuItems: false,
-    authorization: false,
-    userName: 'Имя',
-  };
-
   data: Props;
   myRef: React.RefObject<HTMLHeadingElement>;
   btnLogin: Button;
@@ -58,9 +51,12 @@ class Header extends React.Component<Props> {
   }
 
   printMenu(items: Menu[]) {
+    const {
+      data: { id = 'header' },
+    } = this;
     return items.map((item: Menu, index) =>
       item.type === 'expand' ? (
-        <MenuLiExpand item={item} key={`${this.data.id}menu${index}`} />
+        <MenuLiExpand item={item} key={`${id}menu${index}`} />
       ) : (
         <li
           className={
@@ -68,7 +64,7 @@ class Header extends React.Component<Props> {
             (item.state === 'active' ? 'header__menu-li_active' : '') +
             (item.type === 'expand' ? 'header__menu-li_expand js-header__menu-li_expand' : '')
           }
-          key={`${this.data.id}menu${index}`}
+          key={`${id}menu${index}`}
         >
           <a className="header__menu-a" href={item.link}>
             {item.menuItem}
@@ -80,7 +76,7 @@ class Header extends React.Component<Props> {
 
   render() {
     let {
-      data: { menuItems, authorization, userName },
+      data: { menuItems = false, authorization = false, userName = 'Имя' },
       btnLogin,
       btnRegistr,
     } = this;
