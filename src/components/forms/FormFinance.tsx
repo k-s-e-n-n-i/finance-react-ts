@@ -5,7 +5,7 @@ import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
 import InputText from '../InputText/InputText';
 import History from '../History/History';
 
-import { Requests } from './FormFinance.Requests';
+import { Requests } from '../../pages/finance/finance.Requests';
 import { HistoryList } from '../../modules/interfaces';
 
 interface Props {
@@ -95,10 +95,26 @@ class FormFinance extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    const compFormFinance = this;
+    const { socket, year, month, requests } = new Requests().getHistory();
     const form = this.refForm.current;
-    if (form) {
-      const socket = new Requests(this, form);
-      socket.getHistory();
+    const nameformMonth = form?.getAttribute('data-name');
+
+    if (socket != null) {
+      socket.onmessage = (event) => {
+        const incomingMessage = event.data;
+        const data = JSON.parse(incomingMessage);
+        const formName = data.form;
+
+        if (formName == `${year}.${month}.${nameformMonth}`) {
+          requests.runUpdateFormFinance({
+            formName: formName,
+            data: data,
+            incomingMessage: incomingMessage,
+            compFormFinance: compFormFinance,
+          });
+        }
+      };
     }
   }
 }

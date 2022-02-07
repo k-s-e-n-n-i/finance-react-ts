@@ -4,6 +4,8 @@ import FormFinance from '../../components/forms/FormFinance';
 import FormMonth from '../../components/forms/FormMonth';
 import FormTotal from '../../components/FormTotal/FormTotal';
 
+import { Requests } from './finance.Requests';
+
 interface Props {
   date?: string;
 }
@@ -45,6 +47,11 @@ class Finance extends React.Component<Props> {
         </div>
       </main>
     );
+  }
+
+  componentDidMount() {
+    // const socket = new Requests();
+    const { socket, year, month, requests } = new Requests().socketRun();
   }
 }
 

@@ -3,7 +3,7 @@ import './FormFinance.scss';
 
 import MonthTable from '../MonthTable/MonthTable';
 
-import { Requests } from './FormFinance.Requests';
+import { Requests } from '../../pages/finance/finance.Requests';
 import { Entry } from '../../modules/interfaces';
 
 interface Props {
@@ -66,10 +66,34 @@ class FormMonth extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    const compFormFinance = this;
+    const { socket, year, month, requests } = new Requests().getHistory();
     const form = this.refForm.current;
-    if (form) {
-      const socket = new Requests(this, form);
-      socket.getHistory();
+    const nameformMonth = form?.getAttribute('data-name');
+
+    if (socket != null) {
+      socket.onmessage = (event) => {
+        const incomingMessage = event.data;
+        const data = JSON.parse(incomingMessage);
+        const formName = data.form;
+
+        if (formName == `${year}.${month}.${nameformMonth}`) {
+          requests.runUpdateFormMonth({
+            formName: formName,
+            data: data,
+            incomingMessage: incomingMessage,
+            compFormFinance: compFormFinance,
+          });
+        }
+        //else {
+        //   Requests.runUpdateFormFinance({
+        //     formName: formName,
+        //     data: data,
+        //     incomingMessage: incomingMessage,
+        //     // compFormFinance: compFormFinance,
+        //   });
+        // }
+      };
     }
   }
 }

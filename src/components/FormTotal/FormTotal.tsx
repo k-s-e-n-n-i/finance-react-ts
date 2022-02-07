@@ -1,7 +1,7 @@
 import React from 'react';
 import './FormTotal.scss';
 
-import { Requests } from './FormTotal.Requests';
+// import { Requests } from './FormTotal.Requests';
 import FormFinance from '../forms/FormFinance';
 
 interface Props {
@@ -126,11 +126,11 @@ class FormTotal extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const form = this.refForm.current;
-    if (form) {
-      const socket = new Requests(this);
-      socket.getHistory();
-    }
+    // const form = this.refForm.current;
+    // if (form) {
+    //   const socket = new Requests(this);
+    //   socket.getHistory();
+    // }
   }
 }
 
