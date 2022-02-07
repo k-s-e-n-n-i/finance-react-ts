@@ -274,7 +274,7 @@ function updateEntrys(idEntry, objData, typeRequest) {
     });
   }
 
-  newJSON = Object.assign(getDataFile, { [formName]: newFin });
+  newJSON = Object.assign({}, getDataFile, { [formName]: newFin });
 
   fs.writeFileSync(`data/${year}.${monthStr}/${fileName}.json`, JSON.stringify(newJSON));
   const json = getDataFromFile(formName);
@@ -346,7 +346,7 @@ function sortData(formName) {
     });
   }
 
-  const newFinance = Object.assign({ [formName]: fin }, getDataFile);
+  const newFinance = Object.assign({}, { [formName]: fin }, getDataFile);
 
   fs.writeFileSync(`data/${year}.${monthStr}/${fileName}.json`, JSON.stringify(newFinance));
 
@@ -379,7 +379,7 @@ function runStart(formName) {
     });
   }
 
-  newJSON = Object.assign(getDataFile, { [formName]: newFin });
+  newJSON = Object.assign({}, getDataFile, { [formName]: newFin });
 
   fs.writeFileSync(`data/${year}.${monthStr}/${fileName}.json`, JSON.stringify(newJSON));
 
