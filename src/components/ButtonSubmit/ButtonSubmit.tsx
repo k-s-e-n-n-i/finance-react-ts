@@ -19,35 +19,33 @@ class ButtonSubmit extends React.Component<Props> {
   }
   render() {
     let {
-      data: { text = 'Текст', name = '', height = 'wide', border = false, arrow = false, hover = false },
+      data: { text = 'Текст', name = '', height = 'wide', border = true, arrow = false, hover = false },
     } = this;
 
+    const classBorder = border ? 'button-submit_border ' : 'button-submit_gradient ';
+    const classHeight = height === 'narrow' ? 'button-submit_narrow ' : 'button-submit_wide ';
+    const classHover = hover ? 'button-submit_hover ' : '';
+
+    const classBtnArrow = arrow ? 'button-submit__block_gradient_arrow' : '';
+    const classBtnBorder = border
+      ? `button-submit__block_border`
+      : `button-submit__block_gradient ${classBtnArrow}`;
+
+    const arrowBlock = arrow ? <div className="button-submit__arrow button-submit__arrow_white"></div> : null;
+
+    const classBorderHover = hover ? 'button-submit__border_hover ' : '';
+    const borderBlock = border ? <div className={`button-submit__border ${classBorderHover}`}></div> : null;
+
     return (
-      <div
-        className={
-          'button-submit ' +
-          (border ? 'button-submit_border ' : 'button-submit_gradient ') +
-          (height === 'narrow' ? 'button-submit_narrow ' : 'button-submit_wide ') +
-          (hover ? 'button-submit_hover ' : '')
-        }
-      >
+      <div className={`button-submit ${classBorder} ${classHeight} ${classHover}`}>
         <input
           type="submit"
-          className={
-            'button-submit__block' +
-            (border
-              ? ' button-submit__block_border '
-              : ' button-submit__block_gradient ' + (arrow ? 'button-submit__block_gradient_arrow' : ''))
-          }
+          className={`button-submit__block ${classBtnBorder}`}
           value={text}
           name={name}
         ></input>
-        {arrow ? <div className="button-submit__arrow button-submit__arrow_white"></div> : ''}
-        {border ? (
-          <div className={'button-submit__border ' + (hover ? 'button-submit__border_hover ' : '')}></div>
-        ) : (
-          ''
-        )}
+        {arrowBlock}
+        {borderBlock}
       </div>
     );
   }
